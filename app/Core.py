@@ -1,21 +1,22 @@
 # Logic File
+import Storage
 
 
-class HabitTracker:
+class HabitLogic:
     def __init__(self):
         pass
 
-    def addHabit(self, habitName):
-        pass
 
-    def removeHabit(self, habitName):
-        pass
+class Habit:
+    def __init__(self, habitName):
+        self.isCompleted = False
+        self.habitName = habitName
 
-    def editHabit(self, habitName):
-        pass
+    def completeHabit(self):
+        self.isCompleted = True
 
-    def completeHabit(self, habitName):
-        pass
+    def uncompleteHabit(self):
+        self.isCompleted = False
 
 
 if __name__ == "__main__":
