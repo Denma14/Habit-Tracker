@@ -59,7 +59,7 @@ class MainWindow(QMainWindow):
             newWidget = QWidget(self.topWidget)
             self.ScrollAreaLayout.addWidget(newWidget)
             newWidget.setStyleSheet("background-color: red;")
-            newWidget.setFixedSize(450, 50)
+            newWidget.setFixedSize(425, 50)
 
 
 def main():
