@@ -1,0 +1,3 @@
+https://colorhunt.co/palette/0000002222221dcd9f169976
+
+background = #000000
