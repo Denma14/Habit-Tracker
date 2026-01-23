@@ -1,6 +1,14 @@
 {
     "1": {
-        "Habit": "test1",
+        "Name": "Habit1",
+        "isCompleted": false
+    },
+    "2": {
+        "Name": "Habit2",
+        "isCompleted": false
+    },
+    "3": {
+        "Name": "Habit3",
         "isCompleted": false
     }
 }
