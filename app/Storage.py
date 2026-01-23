@@ -1,7 +1,7 @@
 # Storage file
 import json
 
-DATABASE_PATH: str = "app/test.json"
+DATABASE_PATH: str = "app/Habit_Data.json"
 
 
 def loadData():

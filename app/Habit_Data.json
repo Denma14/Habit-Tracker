@@ -1,1 +1,6 @@
-{}
+{
+    "1": {
+        "Habit": "test1",
+        "isCompleted": false
+    }
+}
