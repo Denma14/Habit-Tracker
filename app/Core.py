@@ -8,38 +8,46 @@ class HabitLogic:
         self.habitData: dict = Storage.loadData()
 
     def createHabit(self, habitName):
-        data = Storage.loadData()
         newHabit = self.toDict(
             habitName, False
         )  # New habits are not completed by default
-        data[str(len(data) + 1)] = newHabit
-        Storage.saveData(data)
+        newID = str(len(self.habitData) + 1)
+        self.habitData[newID] = newHabit
+        Storage.saveData(self.habitData)
+        print(f"Habit |{newID} - {habitName}| created.")
 
     def deleteHabit(self, habitName):
         habitID, habitName = self.viewHabit(habitName)
+        self.habitData.pop(habitID)
+        Storage.saveData(self.habitData)
+        print(f"Habit |{habitID} - {habitName}| deleted.")
 
-    def updateHabit(self, habitName):
+    def updateHabit(self, habitName, newHabitName):
         habitID, habitName = self.viewHabit(habitName)
+        self.habitData[habitID]["Name"] = newHabitName
+        Storage.saveData(self.habitData)
 
-    @property
     def viewHabit(self, habitName: str):
+        searchQuery = None
         for key, value in self.habitData.items():
             if value["Name"].lower() == habitName.lower():
+                searchQuery = value
+                print(f"Habit found: |{key} - {value}|")
                 return key, value
-            else:
-                print("Habit not found.")
+        if searchQuery is None:
+            print("Habit not found.")
 
     def completeHabit(self, habitName):
         habitID, habitName = self.viewHabit(habitName)
         self.habitData[habitID]["isCompleted"] = True
         Storage.saveData(self.habitData)
-        print(self.habitData[habitID])
+        print(f"Habit |{habitID} - {habitName}| marked as completed.")
 
     def unCompleteHabit(self, habitName):
         habitID, habitName = self.viewHabit(habitName)
         self.habitData[habitID]["isCompleted"] = False
         Storage.saveData(self.habitData)
-        print(self.habitData[habitID])
+        print(f"Habit |{habitID} - {habitName}| marked as incompleted.")
 
     def toDict(self, habitName, isCompleted):
         return {"Name": habitName, "isCompleted": isCompleted}
@@ -47,9 +55,14 @@ class HabitLogic:
 
 if __name__ == "__main__":
     createHabit = HabitLogic()
-    createHabit.createHabit("HabitTest")
-    createHabit.viewHabit("HabitTest")
+    createHabit.createHabit("Test1")
     time.sleep(1)
-    createHabit.completeHabit("HabitTest")
+    createHabit.viewHabit("Test1")
     time.sleep(1)
-    createHabit.unCompleteHabit("HabitTest")
+    createHabit.updateHabit("Test1", "Test 2")
+    time.sleep(1)
+    createHabit.completeHabit("Test 2")
+    time.sleep(1)
+    createHabit.unCompleteHabit("Test 2")
+    time.sleep(1)
+    createHabit.deleteHabit("Test 2")
