@@ -12,5 +12,14 @@ def idGenerator(dataDict: dict):
     return id
 
 
+def duplicateChecker(dataDict: dict, habitName: str):  # Incomplete
+    searchQuery = None
+    for key, value in dataDict.items():
+        if value["Name"].lower() == habitName.lower():
+            print(f"Duplicate habit found: |{key}| - |{value}|")
+            searchQuery = key
+            habitName = habitName
+
+
 if __name__ == "__main__":
     pass

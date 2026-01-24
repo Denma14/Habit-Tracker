@@ -15,7 +15,7 @@ class MainWindow(QMainWindow):
         self.setGeometry(750, 250, 500, 550)
         self.setFixedSize(500, 550)
 
-        self.Logic = Core.HabitLogic()
+        self.HabitLogic = Core.HabitLogic()
 
         # Main Widget
         self.mainWidget = QWidget(self)
@@ -36,7 +36,7 @@ class MainWindow(QMainWindow):
 
         self.loadStyles()
         self.loadLayouts()
-        self.addWidgets()
+        self.loadHabits()
 
     def loadStyles(self):
         # Main Widget
@@ -60,6 +60,17 @@ class MainWindow(QMainWindow):
             self.ScrollAreaLayout.addWidget(newWidget)
             newWidget.setStyleSheet("background-color: red;")
             newWidget.setFixedSize(425, 50)
+
+    def loadHabits(self):
+        self.HabitLogic.habitData
+        for key, value in self.HabitLogic.habitData.items():
+            newWidget = QWidget(self.ScrollContent)
+            self.ScrollAreaLayout.addWidget(newWidget)
+            newWidget.setStyleSheet("background-color: red;")
+            newWidget.setFixedSize(425, 50)
+            habitTitle = QLabel(newWidget)
+            habitTitle.setText(value["Name"])
+            habitTitle.setStyleSheet("color: blue;")
 
 
 def main():

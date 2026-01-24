@@ -73,4 +73,4 @@ class HabitLogic:
 
 if __name__ == "__main__":
     createHabit = HabitLogic()
-    createHabit.deleteHabit("Test1")
+    createHabit.deleteHabit("Read")
