@@ -1,5 +1,6 @@
 # Logic File
 import Storage
+import Helper
 import time
 
 
@@ -11,21 +12,28 @@ class HabitLogic:
         newHabit = self.toDict(
             habitName, False
         )  # New habits are not completed by default
-        newID = str(len(self.habitData) + 1)
+        newID = Helper.idGenerator(self.habitData)
         self.habitData[newID] = newHabit
         Storage.saveData(self.habitData)
         print(f"Habit |{newID} - {habitName}| created.")
 
     def deleteHabit(self, habitName):
         habitID, habitName = self.viewHabit(habitName)
+        if habitID is None:
+            return
+
         self.habitData.pop(habitID)
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| deleted.")
 
     def updateHabit(self, habitName, newHabitName):
         habitID, habitName = self.viewHabit(habitName)
+        if habitID is None:
+            return
+
         self.habitData[habitID]["Name"] = newHabitName
         Storage.saveData(self.habitData)
+        print(f"Habit |{habitID} - {habitName}| updated to |{newHabitName}|")
 
     def viewHabit(self, habitName: str):
         searchQuery = None
@@ -35,16 +43,26 @@ class HabitLogic:
                 print(f"Habit found: |{key} - {value}|")
                 return key, value
         if searchQuery is None:
-            print("Habit not found.")
+            print(f"{habitName} not found.")
+            return None, None
+
+    def viewAllHabits(self):
+        for key, value in self.habitData.items():
+            print(f"|{key}| - |{value}|")
 
     def completeHabit(self, habitName):
         habitID, habitName = self.viewHabit(habitName)
+        if habitID is None:
+            return
         self.habitData[habitID]["isCompleted"] = True
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| marked as completed.")
 
     def unCompleteHabit(self, habitName):
         habitID, habitName = self.viewHabit(habitName)
+        if habitID is None:
+            return
+
         self.habitData[habitID]["isCompleted"] = False
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| marked as incompleted.")
@@ -55,14 +73,4 @@ class HabitLogic:
 
 if __name__ == "__main__":
     createHabit = HabitLogic()
-    createHabit.createHabit("Test1")
-    time.sleep(1)
-    createHabit.viewHabit("Test1")
-    time.sleep(1)
-    createHabit.updateHabit("Test1", "Test 2")
-    time.sleep(1)
-    createHabit.completeHabit("Test 2")
-    time.sleep(1)
-    createHabit.unCompleteHabit("Test 2")
-    time.sleep(1)
-    createHabit.deleteHabit("Test 2")
+    createHabit.deleteHabit("Test1")
