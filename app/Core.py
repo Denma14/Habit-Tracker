@@ -4,34 +4,27 @@ import Storage
 
 class HabitLogic:
     def __init__(self):
-        pass
+        self.habitData = Storage.loadData()
 
     def createHabit(self, habitName):
         data = Storage.loadData()
-        newHabit = Habit(habitName)
-        data[str(len(data) + 1)] = newHabit.toDict()
+        newHabit = self.toDict(
+            habitName, False
+        )  # New habits are not completed by default
+        data[str(len(data) + 1)] = newHabit
         Storage.saveData(data)
 
     def deleteHabit(self, habitName):
         pass
 
+    def updateHabit(self, habitName):
+        pass
+
     def completeHabit(self, habitName):
         pass
 
-
-class Habit:
-    def __init__(self, habitName):
-        self.isCompleted = False
-        self.habitName = habitName
-
-    def completeHabit(self):
-        self.isCompleted = True
-
-    def uncompleteHabit(self):
-        self.isCompleted = False
-
-    def toDict(self):
-        return {"Name": self.habitName, "isCompleted": self.isCompleted}
+    def toDict(self, habitName, isCompleted):
+        return {"Name": habitName, "isCompleted": isCompleted}
 
 
 if __name__ == "__main__":
