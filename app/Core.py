@@ -4,16 +4,49 @@ import Helper
 import time
 
 
+class Habit:
+    def __init__(self, name: str, isCompleted: bool, id: int):
+        self.name = name
+        self.id = id
+        self.isCompleted = isCompleted
+        self.dateCreated = Helper.dateGetter()
+        self.lastCompleted = None
+        self.streak = 0
+
+    @property
+    def toDict(self):
+        return {
+            "Name": self.name,
+            "IsCompleted": self.isCompleted,
+            "Streak": self.streak,
+            "DateCreated": self.dateCreated,
+            "LastCompleted": self.lastCompleted,
+        }
+
+    @property
+    def complete(self):
+        self.toDict["IsCompleted"] = True
+        self.toDict["LastCompleted"] = Helper.dateGetter()
+        if not self.streak:  # Incomplete figuring out how to do this
+            self.toDict["Streak"] = self.streak + 1
+        return self.toDict
+
+    def unComplete(self):
+        self.toDict["IsCompleted"] = False
+        return self.toDict
+
+
 class HabitLogic:
     def __init__(self):
         self.habitData: dict = Storage.loadData()
+        self.date = Helper.dateGetter()
 
     def createHabit(self, habitName):
-        newHabit = self.toDict(
-            habitName, False
-        )  # New habits are not completed by default
         newID = Helper.idGenerator(self.habitData)
-        self.habitData[newID] = newHabit
+        newHabit = Habit(
+            habitName, False, newID
+        )  # New habits are not completed by default
+        self.habitData[newID] = newHabit.toDict
         Storage.saveData(self.habitData)
         print(f"Habit |{newID} - {habitName}| created.")
 
@@ -54,7 +87,7 @@ class HabitLogic:
         habitID, habitName = self.viewHabit(habitName)
         if habitID is None:
             return
-        self.habitData[habitID]["isCompleted"] = True
+        self.habitData[habitID]["IsCompleted"] = True
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| marked as completed.")
 
@@ -63,14 +96,11 @@ class HabitLogic:
         if habitID is None:
             return
 
-        self.habitData[habitID]["isCompleted"] = False
+        self.habitData[habitID]["IsCompleted"] = False
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| marked as incompleted.")
-
-    def toDict(self, habitName, isCompleted):
-        return {"Name": habitName, "isCompleted": isCompleted}
 
 
 if __name__ == "__main__":
     createHabit = HabitLogic()
-    createHabit.deleteHabit("Read")
+    createHabit.completeHabit("Read")

@@ -1,4 +1,5 @@
 # Helper file
+from datetime import datetime
 
 
 def idGenerator(dataDict: dict):
@@ -19,6 +20,10 @@ def duplicateChecker(dataDict: dict, habitName: str):  # Incomplete
             print(f"Duplicate habit found: |{key}| - |{value}|")
             searchQuery = key
             habitName = habitName
+
+
+def dateGetter():
+    return datetime.today().strftime("%Y-%m-%d")
 
 
 if __name__ == "__main__":
