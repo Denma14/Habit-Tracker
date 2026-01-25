@@ -1,9 +1,9 @@
 {
     "1": {
         "Name": "Read",
-        "IsCompleted": false,
-        "Streak": 0,
+        "IsCompleted": true,
+        "Streak": 1,
         "DateCreated": "2026-01-25",
-        "LastCompleted": null
+        "LastCompleted": "2026-01-25"
     }
 }

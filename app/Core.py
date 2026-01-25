@@ -51,10 +51,14 @@ class HabitLogic:
     def createHabit(self, habitName):
         newID = Helper.idGenerator(self.habitData)
         newHabit = Habit(
-            habitName, newID, False, Helper.dateGetter()
+            Helper.duplicateChecker(self.habits, habitName),
+            newID,
+            False,
+            Helper.dateGetter(),
         )  # New habits are not completed by default
-        self.habitData[newID] = newHabit.toDict
+
         self.habits[newID] = newHabit
+        self.habitData[newID] = newHabit.toDict
         Storage.saveData(self.habitData)
         print(f"Habit |{newID} - {habitName}| created.")
 
@@ -64,6 +68,7 @@ class HabitLogic:
             return
 
         self.habitData.pop(habitID)
+        self.habits.pop(habitID)
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| deleted.")
 
@@ -73,19 +78,18 @@ class HabitLogic:
             return
 
         self.habitData[habitID]["Name"] = newHabitName
+        self.habits[habitID].name = newHabitName
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| updated to |{newHabitName}|")
 
     def viewHabit(self, habitName: str):
         searchQuery = None
-        for key, value in self.habitData.items():
-            if value["Name"].lower() == habitName.lower():
-                searchQuery = value
-                # print(f"Habit found: |{key} - {value}|")
-                return key, value
+        for key, value in self.habits.items():
+            if value.name.lower() == habitName.lower():
+                searchQuery = (key, value.name)
+                return searchQuery
         if searchQuery is None:
-            print(f"{habitName} not found.")
-            return None, None
+            print(f"|{habitName}| does not exist.")
 
     def viewAllHabits(self):
         for key, value in self.habitData.items():
@@ -127,4 +131,4 @@ class HabitLogic:
 
 if __name__ == "__main__":
     createHabit = HabitLogic()
-    createHabit.unCompleteHabit("Read")
+    createHabit.createHabit("Read")

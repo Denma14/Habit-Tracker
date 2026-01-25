@@ -15,11 +15,17 @@ def idGenerator(dataDict: dict):
 
 def duplicateChecker(dataDict: dict, habitName: str):  # Incomplete
     searchQuery = None
+    duplicateNumber = 0
     for key, value in dataDict.items():
-        if value["Name"].lower() == habitName.lower():
+        if value.name.lower() == habitName.lower():
             print(f"Duplicate habit found: |{key}| - |{value}|")
             searchQuery = key
-            habitName = habitName
+            for key, value in dataDict.items():
+                duplicateNumber += 1
+            value.name = f"{value.name} ({duplicateNumber})"
+            return value.name
+    if searchQuery is None:
+        return habitName
 
 
 def dateGetter():
