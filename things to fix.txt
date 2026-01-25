@@ -1,0 +1,12 @@
+⚠️ What Still Needs Attention
+1) deleteHabit and updateHabit only update habitData
+You remove/edit the dictionary, but you don’t update self.habits. That means your in‑memory objects can go out of sync.
+Example: You delete a habit from JSON but it still exists in self.habits.
+You should keep both in sync or use one source of truth.
+
+2) completeHabit depends on self.habits having the habit
+If a habit exists in JSON but wasn’t loaded into self.habits (or gets removed from one and not the other), self.habits[habitID] will break.
+This is another sign you need consistent synchronization.
+
+3) Habit.toDict is still a @property
+That’s fine if it’s read‑only, but conceptually toDict is more of a conversion action than data. It works, but it’s slightly misleading to make it a property. Not a bug, just something to consider.
