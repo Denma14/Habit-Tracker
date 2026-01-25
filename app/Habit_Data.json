@@ -1,9 +1,37 @@
 {
     "1": {
-        "Name": "Read",
-        "IsCompleted": true,
-        "Streak": 1,
+        "Name": "Read (1)",
+        "IsCompleted": false,
+        "Streak": 0,
         "DateCreated": "2026-01-25",
-        "LastCompleted": "2026-01-25"
+        "LastCompleted": null
+    },
+    "2": {
+        "Name": "Read (2)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-25",
+        "LastCompleted": null
+    },
+    "3": {
+        "Name": "Read (3)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-25",
+        "LastCompleted": null
+    },
+    "4": {
+        "Name": "Read (4)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-25",
+        "LastCompleted": null
+    },
+    "5": {
+        "Name": "Read (5)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-25",
+        "LastCompleted": null
     }
 }
