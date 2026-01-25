@@ -31,6 +31,7 @@ class Habit:
             self.toDict["Streak"] = self.streak + 1
         return self.toDict
 
+    @property
     def unComplete(self):
         self.toDict["IsCompleted"] = False
         return self.toDict
