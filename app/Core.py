@@ -5,12 +5,19 @@ import time
 
 
 class Habit:
-    def __init__(self, name: str, isCompleted: bool, id: int):
+    def __init__(
+        self,
+        name: str,
+        id: int,
+        isCompleted: bool,
+        dateCreated: str,
+        lastCompleted=None,
+    ):
         self.name = name
         self.id = id
         self.isCompleted = isCompleted
-        self.dateCreated = Helper.dateGetter()
-        self.lastCompleted = None
+        self.dateCreated = dateCreated
+        self.lastCompleted = lastCompleted
         self.streak = 0
 
     @property
@@ -23,18 +30,14 @@ class Habit:
             "LastCompleted": self.lastCompleted,
         }
 
-    @property
     def complete(self):
-        self.toDict["IsCompleted"] = True
-        self.toDict["LastCompleted"] = Helper.dateGetter()
+        self.isCompleted = True
+        self.lastCompleted = Helper.dateGetter()
         if not self.streak:  # Incomplete figuring out how to do this
-            self.toDict["Streak"] = self.streak + 1
-        return self.toDict
+            self.streak += 1
 
-    @property
     def unComplete(self):
-        self.toDict["IsCompleted"] = False
-        return self.toDict
+        self.isCompleted = False
 
 
 class HabitLogic:
@@ -42,12 +45,16 @@ class HabitLogic:
         self.habitData: dict = Storage.loadData()
         self.date = Helper.dateGetter()
 
+        self.habits = {}
+        self.loadHabits()
+
     def createHabit(self, habitName):
         newID = Helper.idGenerator(self.habitData)
         newHabit = Habit(
-            habitName, False, newID
+            habitName, newID, False, Helper.dateGetter()
         )  # New habits are not completed by default
         self.habitData[newID] = newHabit.toDict
+        self.habits[newID] = newHabit
         Storage.saveData(self.habitData)
         print(f"Habit |{newID} - {habitName}| created.")
 
@@ -74,7 +81,7 @@ class HabitLogic:
         for key, value in self.habitData.items():
             if value["Name"].lower() == habitName.lower():
                 searchQuery = value
-                print(f"Habit found: |{key} - {value}|")
+                # print(f"Habit found: |{key} - {value}|")
                 return key, value
         if searchQuery is None:
             print(f"{habitName} not found.")
@@ -88,20 +95,36 @@ class HabitLogic:
         habitID, habitName = self.viewHabit(habitName)
         if habitID is None:
             return
-        self.habitData[habitID]["IsCompleted"] = True
+        self.habits[habitID].complete()
+        self.habitData[habitID] = self.habits[habitID].toDict
+        print(self.habits[habitID].toDict)
         Storage.saveData(self.habitData)
-        print(f"Habit |{habitID} - {habitName}| marked as completed.")
+        print(
+            f"From CompleteHabit: Habit |{habitID} - {habitName}| marked as completed."
+        )
 
     def unCompleteHabit(self, habitName):
         habitID, habitName = self.viewHabit(habitName)
         if habitID is None:
             return
 
-        self.habitData[habitID]["IsCompleted"] = False
+        self.habits[habitID].unComplete()
+        self.habitData[habitID] = self.habits[habitID].toDict
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| marked as incompleted.")
+
+    def loadHabits(self):
+        for key, value in self.habitData.items():
+            habit = Habit(
+                value["Name"],
+                key,
+                value["IsCompleted"],
+                value["DateCreated"],
+                value["LastCompleted"],
+            )
+            self.habits[key] = habit
 
 
 if __name__ == "__main__":
     createHabit = HabitLogic()
-    createHabit.completeHabit("Read")
+    createHabit.unCompleteHabit("Read")

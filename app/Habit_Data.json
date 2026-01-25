@@ -1,7 +1,7 @@
 {
     "1": {
         "Name": "Read",
-        "IsCompleted": true,
+        "IsCompleted": false,
         "Streak": 0,
         "DateCreated": "2026-01-25",
         "LastCompleted": null
