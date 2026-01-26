@@ -33,5 +33,12 @@
         "Streak": 0,
         "DateCreated": "2026-01-25",
         "LastCompleted": null
+    },
+    "6": {
+        "Name": "gym",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-26",
+        "LastCompleted": null
     }
 }

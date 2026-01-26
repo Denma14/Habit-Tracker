@@ -58,7 +58,6 @@ class HabitLogic:
         )  # New habits are not completed by default
 
         self.habits[newID] = newHabit
-        self.habits[newID].name = Helper.duplicateChecker(self.habits, habitName)
         self.habitData[newID] = newHabit.toDict
         Storage.saveData(self.habitData)
         print(f"Habit |{newID} - {habitName}| created.")
@@ -132,5 +131,4 @@ class HabitLogic:
 
 if __name__ == "__main__":
     createHabit = HabitLogic()
-    for i in range(1, 6):
-        createHabit.createHabit("Read")
+    createHabit.createHabit("gym")

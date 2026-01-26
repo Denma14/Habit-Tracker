@@ -24,10 +24,16 @@ class MainWindow(QMainWindow):
 
         # top Widget
         self.topWidget = QWidget(self.mainWidget)
-        self.topLayout = QVBoxLayout(self.topWidget)
+        self.topLayout = QHBoxLayout(self.topWidget)
 
-        self.ScrollArea = QScrollArea(self.topWidget)
-        self.topLayout.addWidget(self.ScrollArea)
+        self.appName = QLabel("Habit Tracker", self.topWidget)
+        self.addHabitButton = QPushButton(
+            "Add Habit", self.topWidget, clicked=self.addHabit
+        )
+        # Scroll Area
+
+        self.ScrollArea = QScrollArea(self.mainWidget)
+        # elf.topLayout.addWidget(self.ScrollArea)
         self.ScrollArea.setWidgetResizable(True)
         self.ScrollContent = QWidget(self.ScrollArea)
 
@@ -43,16 +49,34 @@ class MainWindow(QMainWindow):
         self.mainWidget.setStyleSheet("background-color: #000000;")
 
         # Top widget
+        # /--Sizes
+        self.topWidget.setFixedHeight(40)  # default is 40
+        self.appName.setFixedSize(150, 30)
+        self.addHabitButton.setFixedSize(100, 30)
+
+        # /--Alignments
+        self.appName.setAlignment(Qt.AlignmentFlag.AlignCenter)
+
         self.topWidget.setStyleSheet("background-color: #222222;")
+        self.appName.setStyleSheet(
+            "color: white; background-color: red; font-size: 20px; font-weight: bold;"
+        )
 
         # Apply to your Scroll Area or Widget
         self.ScrollArea.setStyleSheet(Styles.scrollbar_stylesheet)
+        self.ScrollContent.setStyleSheet("background-color: #222222;")
 
     def loadLayouts(self):
         # Main Widget
         self.mainLayout.addWidget(self.topWidget)
+        self.mainLayout.addWidget(self.ScrollArea)
+        # /-Alignments
 
         # Top widget
+        self.topLayout.addWidget(self.appName, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.topLayout.addWidget(
+            self.addHabitButton, alignment=Qt.AlignmentFlag.AlignCenter
+        )
 
     def addWidgets(self):
         for i in range(1, 11):
@@ -62,15 +86,52 @@ class MainWindow(QMainWindow):
             newWidget.setFixedSize(425, 50)
 
     def loadHabits(self):
-        self.HabitLogic.habitData
+        self.deleteWidgets()
         for key, value in self.HabitLogic.habitData.items():
-            newWidget = QWidget(self.ScrollContent)
-            self.ScrollAreaLayout.addWidget(newWidget)
-            newWidget.setStyleSheet("background-color: red;")
-            newWidget.setFixedSize(425, 50)
-            habitTitle = QLabel(newWidget)
-            habitTitle.setText(value["Name"])
-            habitTitle.setStyleSheet("color: blue;")
+            # Create habit widget--
+            habitWidget = QWidget(self.ScrollContent)
+            habitLayout = QHBoxLayout(habitWidget)
+            habitWidget.setStyleSheet("background-color: red;")
+            habitWidget.setFixedSize(425, 50)
+            self.ScrollAreaLayout.addWidget(habitWidget)
+
+            # Habit Title
+            habitName = QLabel(habitWidget)
+
+            habitLayout.addWidget(habitName)
+            habitName.setText(value["Name"])
+            habitName.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            habitName.setStyleSheet(
+                "background-color: blue;color: white; font-size: 16px; font-weight: bold;"
+            )
+            habitName.setFixedSize(200, 50)
+
+            # Habit Checkbox
+            habitCheckbox = QCheckBox(habitWidget)
+            habitLayout.addWidget(habitCheckbox)
+            habitCheckbox.setChecked(value["IsCompleted"])
+            habitCheckbox.setStyleSheet("background-color: green;")
+            habitCheckbox.stateChanged.connect(
+                lambda state, name=value["Name"]: self.habitStateChanged(state, name)
+            )
+
+    def deleteWidgets(self):
+        for child in self.ScrollContent.children():
+            if isinstance(child, QWidget):
+                self.ScrollAreaLayout.removeWidget(child)
+                child.setParent(None)
+                child.deleteLater()
+
+    def addHabit(self):
+        print("Add Habit clicked!")
+        self.HabitLogic.createHabit("cook")
+        self.loadHabits()
+
+    def habitStateChanged(self, state, habitName):
+        if state == Qt.CheckState.Checked.value:
+            self.HabitLogic.completeHabit(habitName)
+        else:
+            self.HabitLogic.unCompleteHabit(habitName)
 
 
 def main():

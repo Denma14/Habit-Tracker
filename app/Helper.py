@@ -17,14 +17,12 @@ def duplicateChecker(dataDict: dict, habitName: str):  # Incomplete
     searchQuery = None
     duplicateNumber = 0
     for key, value in dataDict.items():
-        duplicateNumber += 1
-    for key, value in dataDict.items():
         if value.name.lower() == habitName.lower():
             print(f"Duplicate habit found: |{key}| - |{value}|")
             searchQuery = key
 
-            value.name = f"{habitName} ({duplicateNumber})"
-            return value.name
+            duplicateNumber += 1
+            return f"{habitName} ({duplicateNumber})"
     if searchQuery is None:
         return habitName
 
