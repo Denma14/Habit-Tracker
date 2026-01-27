@@ -1,44 +1,93 @@
 {
     "1": {
-        "Name": "Read (1)",
+        "Name": "cook",
         "IsCompleted": false,
         "Streak": 0,
-        "DateCreated": "2026-01-25",
+        "DateCreated": "2026-01-27",
         "LastCompleted": null
     },
     "2": {
-        "Name": "Read (2)",
+        "Name": "cook",
         "IsCompleted": false,
         "Streak": 0,
-        "DateCreated": "2026-01-25",
+        "DateCreated": "2026-01-27",
         "LastCompleted": null
     },
     "3": {
-        "Name": "Read (3)",
+        "Name": "cook",
         "IsCompleted": false,
         "Streak": 0,
-        "DateCreated": "2026-01-25",
+        "DateCreated": "2026-01-27",
         "LastCompleted": null
     },
     "4": {
-        "Name": "Read (4)",
+        "Name": "cook",
         "IsCompleted": false,
         "Streak": 0,
-        "DateCreated": "2026-01-25",
+        "DateCreated": "2026-01-27",
         "LastCompleted": null
     },
     "5": {
-        "Name": "Read (5)",
+        "Name": "cook",
         "IsCompleted": false,
         "Streak": 0,
-        "DateCreated": "2026-01-25",
+        "DateCreated": "2026-01-27",
         "LastCompleted": null
     },
     "6": {
-        "Name": "gym",
+        "Name": "cook",
         "IsCompleted": false,
         "Streak": 0,
-        "DateCreated": "2026-01-26",
+        "DateCreated": "2026-01-27",
+        "LastCompleted": null
+    },
+    "7": {
+        "Name": "cook",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-27",
+        "LastCompleted": null
+    },
+    "8": {
+        "Name": "cook",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-27",
+        "LastCompleted": null
+    },
+    "9": {
+        "Name": "cook",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-27",
+        "LastCompleted": null
+    },
+    "10": {
+        "Name": "cook",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-27",
+        "LastCompleted": null
+    },
+    "11": {
+        "Name": "cook",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-27",
+        "LastCompleted": null
+    },
+    "12": {
+        "Name": "cook",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-27",
+        "LastCompleted": null
+    },
+    "13": {
+        "Name": "cook",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-27",
         "LastCompleted": null
     }
 }

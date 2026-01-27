@@ -1,6 +1,6 @@
 # Logic File
-import Storage
-import Helper
+from . import Storage
+from . import Helper
 import time
 
 

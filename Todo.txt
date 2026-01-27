@@ -1,0 +1,8 @@
+modal dialog 
+dialog.accept()
+dialog.reject()
+
+-Complete modal dialog implementation
+-customize modal dialog
+-Handle uncompleting after a day
+-Handle streak

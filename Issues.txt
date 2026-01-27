@@ -1,0 +1,1 @@
+1. Store the id in the widget so that instead of searching for the name, you can search for the id instead for more precision

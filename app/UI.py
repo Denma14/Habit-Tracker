@@ -3,8 +3,8 @@ import sys
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import QFont, QFontDatabase
 from PyQt6.QtCore import Qt
-import Core
-import Styles
+from . import Core
+from . import Styles
 
 
 class MainWindow(QMainWindow):
@@ -30,6 +30,8 @@ class MainWindow(QMainWindow):
         self.addHabitButton = QPushButton(
             "Add Habit", self.topWidget, clicked=self.addHabit
         )
+
+        self.addHabitDialog = QDialog(self)
         # Scroll Area
 
         self.ScrollArea = QScrollArea(self.mainWidget)
@@ -102,13 +104,13 @@ class MainWindow(QMainWindow):
             habitName.setText(value["Name"])
             habitName.setAlignment(Qt.AlignmentFlag.AlignCenter)
             habitName.setStyleSheet(
-                "background-color: blue;color: white; font-size: 16px; font-weight: bold;"
+                "background-color: blue;color: white; font-size: 20px; font-weight: bold;"
             )
             habitName.setFixedSize(200, 50)
 
             # Habit Checkbox
             habitCheckbox = QCheckBox(habitWidget)
-            habitLayout.addWidget(habitCheckbox)
+            habitLayout.addWidget(habitCheckbox, alignment=Qt.AlignmentFlag.AlignCenter)
             habitCheckbox.setChecked(value["IsCompleted"])
             habitCheckbox.setStyleSheet("background-color: green;")
             habitCheckbox.stateChanged.connect(
@@ -124,8 +126,15 @@ class MainWindow(QMainWindow):
 
     def addHabit(self):
         print("Add Habit clicked!")
+        if self.addHabitDialog.exec():
+            self.HabitDialogInit()
         self.HabitLogic.createHabit("cook")
         self.loadHabits()
+
+    def HabitDialogInit(self):
+        self.addHabitDialog.setWindowTitle("Add New Habit")
+        self.addHabitDialog.setGeometry(800, 300, 300, 150)
+        self.addHabitDialog.setFixedSize(300, 150)
 
     def habitStateChanged(self, state, habitName):
         if state == Qt.CheckState.Checked.value:
