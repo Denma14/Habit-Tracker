@@ -2,9 +2,9 @@
     "1": {
         "Name": "cook",
         "IsCompleted": false,
-        "Streak": 0,
+        "Streak": 1,
         "DateCreated": "2026-01-27",
-        "LastCompleted": null
+        "LastCompleted": "2026-01-28"
     },
     "2": {
         "Name": "cook",
@@ -88,6 +88,20 @@
         "IsCompleted": false,
         "Streak": 0,
         "DateCreated": "2026-01-27",
+        "LastCompleted": null
+    },
+    "14": {
+        "Name": "cook",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-28",
+        "LastCompleted": null
+    },
+    "15": {
+        "Name": "Enter Habit Name",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-01-28",
         "LastCompleted": null
     }
 }

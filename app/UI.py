@@ -28,10 +28,9 @@ class MainWindow(QMainWindow):
 
         self.appName = QLabel("Habit Tracker", self.topWidget)
         self.addHabitButton = QPushButton(
-            "Add Habit", self.topWidget, clicked=self.addHabit
+            "Add Habit", self.topWidget, clicked=self.onAddHabitClicked
         )
 
-        self.addHabitDialog = QDialog(self)
         # Scroll Area
 
         self.ScrollArea = QScrollArea(self.mainWidget)
@@ -80,12 +79,47 @@ class MainWindow(QMainWindow):
             self.addHabitButton, alignment=Qt.AlignmentFlag.AlignCenter
         )
 
-    def addWidgets(self):
-        for i in range(1, 11):
-            newWidget = QWidget(self.topWidget)
-            self.ScrollAreaLayout.addWidget(newWidget)
-            newWidget.setStyleSheet("background-color: red;")
-            newWidget.setFixedSize(425, 50)
+    def HabitDialogInit(self):
+        self.addHabitDialog = QDialog(self)
+
+        self.addHabitDialog.setWindowTitle("Add New Habit")
+        self.addHabitDialog.setGeometry(800, 300, 300, 150)
+        self.addHabitDialog.setFixedSize(300, 150)
+
+        self.dialogMainWidget = QWidget(self.addHabitDialog)
+        self.dialogMainWidget.setFixedSize(300, 150)
+
+        self.upperDialogWidget = QWidget(self.dialogMainWidget)
+        self.lowerDialogWidget = QWidget(self.dialogMainWidget)
+
+        self.dialogMainLayout = QVBoxLayout(self.dialogMainWidget)
+        # self.dialogLayout = QVBoxLayout(self.addHabitDialog)
+        self.upperDialogLayout = QHBoxLayout(self.upperDialogWidget)
+        self.lowerDialogLayout = QHBoxLayout(self.lowerDialogWidget)
+
+        self.habitNameInput = QLineEdit("Enter Habit Name", self.addHabitDialog)
+        self.dialogConfirmButton = QPushButton("Add Habit", self.addHabitDialog)
+        self.dialogCancelButton = QPushButton("Cancel", self.addHabitDialog)
+
+        self.dialogMainLayout.addWidget(
+            self.upperDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.dialogMainLayout.addWidget(
+            self.lowerDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.upperDialogLayout.addWidget(
+            self.habitNameInput, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.lowerDialogLayout.addWidget(self.dialogConfirmButton)
+        self.lowerDialogLayout.addWidget(self.dialogCancelButton)
+
+        self.dialogConfirmButton.clicked.connect(
+            lambda: self.HabitLogic.createHabit(self.habitNameInput.text())
+        )
+        self.dialogCancelButton.clicked.connect(self.addHabitDialog.deleteLater)
+        print(self.addHabitDialog)
+
+        self.addHabitDialog.exec()
 
     def loadHabits(self):
         self.deleteWidgets()
@@ -124,17 +158,9 @@ class MainWindow(QMainWindow):
                 child.setParent(None)
                 child.deleteLater()
 
-    def addHabit(self):
-        print("Add Habit clicked!")
-        if self.addHabitDialog.exec():
-            self.HabitDialogInit()
-        self.HabitLogic.createHabit("cook")
+    def onAddHabitClicked(self):
+        self.HabitDialogInit()
         self.loadHabits()
-
-    def HabitDialogInit(self):
-        self.addHabitDialog.setWindowTitle("Add New Habit")
-        self.addHabitDialog.setGeometry(800, 300, 300, 150)
-        self.addHabitDialog.setFixedSize(300, 150)
 
     def habitStateChanged(self, state, habitName):
         if state == Qt.CheckState.Checked.value:

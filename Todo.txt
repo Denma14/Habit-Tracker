@@ -6,3 +6,5 @@ dialog.reject()
 -customize modal dialog
 -Handle uncompleting after a day
 -Handle streak
+
+-make it so that instead of the actions taking in name it takes the id instead
