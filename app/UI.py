@@ -7,6 +7,52 @@ from . import Core
 from . import Styles
 
 
+class AddHabitDialog(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.addHabitDialog = QDialog(self)
+
+        self.addHabitDialog.setWindowTitle("Add New Habit")
+        self.addHabitDialog.setGeometry(800, 300, 300, 150)
+        self.addHabitDialog.setFixedSize(300, 150)
+
+        self.dialogMainWidget = QWidget(self.addHabitDialog)
+        self.dialogMainWidget.setFixedSize(300, 150)
+
+        self.upperDialogWidget = QWidget(self.dialogMainWidget)
+        self.lowerDialogWidget = QWidget(self.dialogMainWidget)
+
+        self.dialogMainLayout = QVBoxLayout(self.dialogMainWidget)
+        # self.dialogLayout = QVBoxLayout(self.addHabitDialog)
+        self.upperDialogLayout = QHBoxLayout(self.upperDialogWidget)
+        self.lowerDialogLayout = QHBoxLayout(self.lowerDialogWidget)
+
+        self.habitNameInput = QLineEdit("Enter Habit Name", self.addHabitDialog)
+        self.dialogConfirmButton = QPushButton("Add Habit", self.addHabitDialog)
+        self.dialogCancelButton = QPushButton("Cancel", self.addHabitDialog)
+
+        self.dialogMainLayout.addWidget(
+            self.upperDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.dialogMainLayout.addWidget(
+            self.lowerDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.upperDialogLayout.addWidget(
+            self.habitNameInput, alignment=Qt.AlignmentFlag.AlignCenter
+        )
+        self.lowerDialogLayout.addWidget(self.dialogConfirmButton)
+        self.lowerDialogLayout.addWidget(self.dialogCancelButton)
+
+        self.dialogConfirmButton.clicked.connect(self.addHabit)
+
+        self.dialogCancelButton.clicked.connect(self.addHabitDialog.deleteLater)
+        print(self.addHabitDialog)
+
+    def addHabit(self):
+        print(self.habitNameInput.text())
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -31,8 +77,9 @@ class MainWindow(QMainWindow):
             "Add Habit", self.topWidget, clicked=self.onAddHabitClicked
         )
 
-        # Scroll Area
+        self.addDialog = AddHabitDialog()
 
+        # Scroll Area
         self.ScrollArea = QScrollArea(self.mainWidget)
         # elf.topLayout.addWidget(self.ScrollArea)
         self.ScrollArea.setWidgetResizable(True)
@@ -79,48 +126,6 @@ class MainWindow(QMainWindow):
             self.addHabitButton, alignment=Qt.AlignmentFlag.AlignCenter
         )
 
-    def HabitDialogInit(self):
-        self.addHabitDialog = QDialog(self)
-
-        self.addHabitDialog.setWindowTitle("Add New Habit")
-        self.addHabitDialog.setGeometry(800, 300, 300, 150)
-        self.addHabitDialog.setFixedSize(300, 150)
-
-        self.dialogMainWidget = QWidget(self.addHabitDialog)
-        self.dialogMainWidget.setFixedSize(300, 150)
-
-        self.upperDialogWidget = QWidget(self.dialogMainWidget)
-        self.lowerDialogWidget = QWidget(self.dialogMainWidget)
-
-        self.dialogMainLayout = QVBoxLayout(self.dialogMainWidget)
-        # self.dialogLayout = QVBoxLayout(self.addHabitDialog)
-        self.upperDialogLayout = QHBoxLayout(self.upperDialogWidget)
-        self.lowerDialogLayout = QHBoxLayout(self.lowerDialogWidget)
-
-        self.habitNameInput = QLineEdit("Enter Habit Name", self.addHabitDialog)
-        self.dialogConfirmButton = QPushButton("Add Habit", self.addHabitDialog)
-        self.dialogCancelButton = QPushButton("Cancel", self.addHabitDialog)
-
-        self.dialogMainLayout.addWidget(
-            self.upperDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
-        )
-        self.dialogMainLayout.addWidget(
-            self.lowerDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
-        )
-        self.upperDialogLayout.addWidget(
-            self.habitNameInput, alignment=Qt.AlignmentFlag.AlignCenter
-        )
-        self.lowerDialogLayout.addWidget(self.dialogConfirmButton)
-        self.lowerDialogLayout.addWidget(self.dialogCancelButton)
-
-        self.dialogConfirmButton.clicked.connect(
-            lambda: self.HabitLogic.createHabit(self.habitNameInput.text())
-        )
-        self.dialogCancelButton.clicked.connect(self.addHabitDialog.deleteLater)
-        print(self.addHabitDialog)
-
-        self.addHabitDialog.exec()
-
     def loadHabits(self):
         self.deleteWidgets()
         for key, value in self.HabitLogic.habitData.items():
@@ -159,7 +164,7 @@ class MainWindow(QMainWindow):
                 child.deleteLater()
 
     def onAddHabitClicked(self):
-        self.HabitDialogInit()
+        self.addDialog.exec()
         self.loadHabits()
 
     def habitStateChanged(self, state, habitName):
