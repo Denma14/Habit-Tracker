@@ -99,6 +99,13 @@
     },
     "15": {
         "Name": "Enter Habit Name",
+        "IsCompleted": true,
+        "Streak": 1,
+        "DateCreated": "2026-01-28",
+        "LastCompleted": "2026-01-28"
+    },
+    "16": {
+        "Name": "Enter Habit Name",
         "IsCompleted": false,
         "Streak": 0,
         "DateCreated": "2026-01-28",

@@ -8,16 +8,16 @@ from . import Styles
 
 
 class AddHabitDialog(QDialog):
-    def __init__(self):
+    def __init__(self, HabitLogic: Core.HabitLogic, parent=None):
         super().__init__()
 
-        self.addHabitDialog = QDialog(self)
+        self.HabitLogic = HabitLogic
 
-        self.addHabitDialog.setWindowTitle("Add New Habit")
-        self.addHabitDialog.setGeometry(800, 300, 300, 150)
-        self.addHabitDialog.setFixedSize(300, 150)
+        self.setWindowTitle("Add New Habit")
+        self.setGeometry(50, 50, 150, 150)
+        self.setFixedSize(300, 150)
 
-        self.dialogMainWidget = QWidget(self.addHabitDialog)
+        self.dialogMainWidget = QWidget(self)
         self.dialogMainWidget.setFixedSize(300, 150)
 
         self.upperDialogWidget = QWidget(self.dialogMainWidget)
@@ -28,9 +28,9 @@ class AddHabitDialog(QDialog):
         self.upperDialogLayout = QHBoxLayout(self.upperDialogWidget)
         self.lowerDialogLayout = QHBoxLayout(self.lowerDialogWidget)
 
-        self.habitNameInput = QLineEdit("Enter Habit Name", self.addHabitDialog)
-        self.dialogConfirmButton = QPushButton("Add Habit", self.addHabitDialog)
-        self.dialogCancelButton = QPushButton("Cancel", self.addHabitDialog)
+        self.habitNameInput = QLineEdit("Enter Habit Name", self.upperDialogWidget)
+        self.dialogConfirmButton = QPushButton("Add Habit", self.lowerDialogWidget)
+        self.dialogCancelButton = QPushButton("Cancel", self.lowerDialogWidget)
 
         self.dialogMainLayout.addWidget(
             self.upperDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
@@ -44,10 +44,12 @@ class AddHabitDialog(QDialog):
         self.lowerDialogLayout.addWidget(self.dialogConfirmButton)
         self.lowerDialogLayout.addWidget(self.dialogCancelButton)
 
-        self.dialogConfirmButton.clicked.connect(self.addHabit)
+        self.dialogConfirmButton.clicked.connect(self.confirmAddHabit)
+        self.dialogCancelButton.clicked.connect(self.close)
 
-        self.dialogCancelButton.clicked.connect(self.addHabitDialog.deleteLater)
-        print(self.addHabitDialog)
+    def confirmAddHabit(self):
+        self.HabitLogic.createHabit(self.habitNameInput.text())
+        self.close()
 
     def addHabit(self):
         print(self.habitNameInput.text())
@@ -77,7 +79,7 @@ class MainWindow(QMainWindow):
             "Add Habit", self.topWidget, clicked=self.onAddHabitClicked
         )
 
-        self.addDialog = AddHabitDialog()
+        self.addDialog = AddHabitDialog(self.HabitLogic, self)
 
         # Scroll Area
         self.ScrollArea = QScrollArea(self.mainWidget)
