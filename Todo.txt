@@ -2,9 +2,7 @@ modal dialog
 dialog.accept()
 dialog.reject()
 
--Complete modal dialog implementation
 -customize modal dialog
--Handle uncompleting after a day
 -Handle streak
 
--make it so that instead of the actions taking in name it takes the id instead
+-make it so that instead of the actions taking in name it takes the id instead/ fix duplicate checker

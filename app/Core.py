@@ -43,15 +43,16 @@ class Habit:
 class HabitLogic:
     def __init__(self):
         self.habitData: dict = Storage.loadData()
-        self.date = Helper.dateGetter()
+        # self.date = Helper.dateGetter()
 
         self.habits = {}
         self.loadHabits()
+        self.checkdate()
 
     def createHabit(self, habitName):
         newID = Helper.idGenerator(self.habitData)
         newHabit = Habit(
-            habitName,
+            Helper.duplicateChecker(self.habits, habitName),
             newID,
             False,
             Helper.dateGetter(),
@@ -117,16 +118,23 @@ class HabitLogic:
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| marked as incompleted.")
 
+    def checkdate(self):
+        for key, value in self.habits.items():
+            if value.lastCompleted != Helper.dateGetter():
+                self.habits[key].unComplete()
+                self.habitData[key] = self.habits[key].toDict
+                Storage.saveData(self.habitData)
+
     def loadHabits(self):
         for key, value in self.habitData.items():
-            habit = Habit(
+            habits = Habit(
                 value["Name"],
                 key,
                 value["IsCompleted"],
                 value["DateCreated"],
                 value["LastCompleted"],
             )
-            self.habits[key] = habit
+            self.habits[key] = habits
 
 
 if __name__ == "__main__":
