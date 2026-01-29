@@ -5,4 +5,4 @@ dialog.reject()
 -customize modal dialog
 -Handle streak
 
--make it so that instead of the actions taking in name it takes the id instead/ fix duplicate checker
+-bug in core where it switches the last completed to streak and last completed becomes null. happens on load

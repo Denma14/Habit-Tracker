@@ -1,5 +1,5 @@
 # Helper file
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 def idGenerator(dataDict: dict):
@@ -17,18 +17,23 @@ def duplicateChecker(dataDict: dict, habitName: str):  # Incomplete
     searchQuery = None
     duplicateNumber = 0
     for key, value in dataDict.items():
-        if value.name.lower() == habitName.lower():
+        if habitName.lower() in value.name.lower():
             print(f"Duplicate habit found: |{key}| - |{value}|")
             searchQuery = key
 
             duplicateNumber += 1
-            return f"{habitName} ({duplicateNumber})"
-    if searchQuery is None:
+    if searchQuery:
+        return f"{habitName} ({duplicateNumber})"
+    elif not searchQuery:
         return habitName
 
 
-def dateGetter():
-    return datetime.today().strftime("%Y-%m-%d")
+def dateGetter(when: str = None):
+    if when == "today":
+        return datetime.today().strftime("%Y-%m-%d")
+    elif when == "yesterday":
+        yesterday = datetime.today() - timedelta(days=1)
+        return yesterday.strftime("%Y-%m-%d")
 
 
 if __name__ == "__main__":

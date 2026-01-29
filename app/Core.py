@@ -11,6 +11,7 @@ class Habit:
         id: int,
         isCompleted: bool,
         dateCreated: str,
+        streak: int = 0,
         lastCompleted=None,
     ):
         self.name = name
@@ -18,7 +19,7 @@ class Habit:
         self.isCompleted = isCompleted
         self.dateCreated = dateCreated
         self.lastCompleted = lastCompleted
-        self.streak = 0
+        self.streak = streak
 
     @property
     def toDict(self):
@@ -32,7 +33,7 @@ class Habit:
 
     def complete(self):
         self.isCompleted = True
-        self.lastCompleted = Helper.dateGetter()
+        self.lastCompleted = Helper.dateGetter("today")
         if not self.streak:  # Incomplete figuring out how to do this
             self.streak += 1
 
@@ -55,7 +56,8 @@ class HabitLogic:
             Helper.duplicateChecker(self.habits, habitName),
             newID,
             False,
-            Helper.dateGetter(),
+            Helper.dateGetter("today"),
+            0,
         )  # New habits are not completed by default
 
         self.habits[newID] = newHabit
@@ -100,6 +102,8 @@ class HabitLogic:
         habitID, habitName = self.viewHabit(habitName)
         if habitID is None:
             return
+        if self.habits[habitID].lastCompleted == Helper.dateGetter("yesterday"):
+            self.habits[habitID].streak += 1
         self.habits[habitID].complete()
         self.habitData[habitID] = self.habits[habitID].toDict
         print(self.habits[habitID].toDict)
@@ -112,7 +116,6 @@ class HabitLogic:
         habitID, habitName = self.viewHabit(habitName)
         if habitID is None:
             return
-
         self.habits[habitID].unComplete()
         self.habitData[habitID] = self.habits[habitID].toDict
         Storage.saveData(self.habitData)
@@ -120,7 +123,7 @@ class HabitLogic:
 
     def checkdate(self):
         for key, value in self.habits.items():
-            if value.lastCompleted != Helper.dateGetter():
+            if value.lastCompleted != Helper.dateGetter("today"):
                 self.habits[key].unComplete()
                 self.habitData[key] = self.habits[key].toDict
                 Storage.saveData(self.habitData)
@@ -129,8 +132,8 @@ class HabitLogic:
         for key, value in self.habitData.items():
             habits = Habit(
                 value["Name"],
-                key,
                 value["IsCompleted"],
+                value["Streak"],
                 value["DateCreated"],
                 value["LastCompleted"],
             )

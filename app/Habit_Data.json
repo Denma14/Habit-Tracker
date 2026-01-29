@@ -2,33 +2,26 @@
     "1": {
         "Name": "cook",
         "IsCompleted": false,
-        "Streak": 0,
+        "Streak": "2026-01-28",
         "DateCreated": "2026-01-27",
-        "LastCompleted": "2026-01-28"
+        "LastCompleted": null
     },
     "2": {
         "Name": "gym",
-        "IsCompleted": true,
-        "Streak": 1,
-        "DateCreated": "2026-01-27",
-        "LastCompleted": "2026-01-29"
-    },
-    "15": {
-        "Name": "Enter Habit Name",
         "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-01-28",
-        "LastCompleted": "2026-01-28"
-    },
-    "16": {
-        "Name": "cook (1)",
-        "IsCompleted": false,
-        "Streak": 0,
+        "Streak": "2026-01-29",
         "DateCreated": "2026-01-29",
         "LastCompleted": null
     },
-    "17": {
-        "Name": "cook (1)",
+    "3": {
+        "Name": "gym (1)",
+        "IsCompleted": false,
+        "Streak": null,
+        "DateCreated": "2026-01-29",
+        "LastCompleted": null
+    },
+    "4": {
+        "Name": "gym (2)",
         "IsCompleted": false,
         "Streak": 0,
         "DateCreated": "2026-01-29",
