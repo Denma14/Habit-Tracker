@@ -1,8 +1,4 @@
-modal dialog 
-dialog.accept()
-dialog.reject()
+TODOS:
 
 -customize modal dialog
--Handle streak
-
--bug in core where it switches the last completed to streak and last completed becomes null. happens on load
+-Capitalize words??

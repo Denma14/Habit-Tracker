@@ -132,9 +132,10 @@ class HabitLogic:
         for key, value in self.habitData.items():
             habits = Habit(
                 value["Name"],
+                key,
                 value["IsCompleted"],
-                value["Streak"],
                 value["DateCreated"],
+                value["Streak"],
                 value["LastCompleted"],
             )
             self.habits[key] = habits
