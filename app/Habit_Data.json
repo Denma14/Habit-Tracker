@@ -1,72 +1,37 @@
 {
     "1": {
-        "Name": "cook",
-        "IsCompleted": false,
-        "Streak": 2,
-        "DateCreated": "2026-01-27",
-        "LastCompleted": "2026-01-29"
+        "Name": "cooking",
+        "IsCompleted": true,
+        "Streak": 1,
+        "DateCreated": "2026-01-30",
+        "LastCompleted": "2026-02-02"
     },
     "2": {
-        "Name": "gym",
+        "Name": "cook (1)",
         "IsCompleted": false,
-        "Streak": "2026-01-29",
-        "DateCreated": "2026-01-29",
-        "LastCompleted": null
+        "Streak": 1,
+        "DateCreated": "2026-01-30",
+        "LastCompleted": "2026-02-02"
     },
     "3": {
-        "Name": "gym (1)",
-        "IsCompleted": false,
-        "Streak": null,
-        "DateCreated": "2026-01-29",
-        "LastCompleted": null
+        "Name": "cook (1)",
+        "IsCompleted": true,
+        "Streak": 1,
+        "DateCreated": "2026-01-25",
+        "LastCompleted": "2026-02-02"
     },
     "4": {
-        "Name": "gym (2)",
+        "Name": "cook (1)",
         "IsCompleted": false,
         "Streak": 0,
-        "DateCreated": "2026-01-29",
+        "DateCreated": "2026-01-30",
         "LastCompleted": null
     },
     "5": {
-        "Name": "Enter Habit Name",
+        "Name": "cook (1)",
         "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-01-29",
-        "LastCompleted": null
-    },
-    "6": {
-        "Name": "Enter Habit Name (1)",
-        "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-01-29",
-        "LastCompleted": null
-    },
-    "7": {
-        "Name": "Enter Habit Name (2)",
-        "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-01-29",
-        "LastCompleted": null
-    },
-    "8": {
-        "Name": "Enter Habit Name (3)",
-        "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-01-29",
-        "LastCompleted": null
-    },
-    "9": {
-        "Name": "Enter Habit Name (4)",
-        "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-01-29",
-        "LastCompleted": null
-    },
-    "10": {
-        "Name": "Enter Habit Name (5)",
-        "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-01-29",
-        "LastCompleted": null
+        "Streak": 1,
+        "DateCreated": "2026-01-30",
+        "LastCompleted": "2026-02-02"
     }
 }

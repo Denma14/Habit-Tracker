@@ -50,7 +50,10 @@ class HabitLogic:
         self.loadHabits()
         self.checkdate()
 
-    def createHabit(self, habitName):
+    def createHabit(self, habitName=None):
+        if not habitName:
+            return
+        print(habitName)
         newID = Helper.idGenerator(self.habitData)
         newHabit = Habit(
             Helper.duplicateChecker(self.habits, habitName),
@@ -85,35 +88,36 @@ class HabitLogic:
         Storage.saveData(self.habitData)
         print(f"Habit |{habitID} - {habitName}| updated to |{newHabitName}|")
 
-    def viewHabit(self, habitName: str):
+    def viewHabit(self, HabitID: int):
         searchQuery = None
         for key, value in self.habits.items():
-            if value.name.lower() == habitName.lower():
+            if key == HabitID:
                 searchQuery = (key, value.name)
                 return searchQuery
         if searchQuery is None:
-            print(f"|{habitName}| does not exist.")
+            print(f"|{HabitID}| does not exist.")
+            return
 
     def viewAllHabits(self):
         for key, value in self.habitData.items():
             print(f"|{key}| - |{value}|")
 
-    def completeHabit(self, habitName):
-        habitID, habitName = self.viewHabit(habitName)
-        if habitID is None:
-            return
-        if self.habits[habitID].lastCompleted == Helper.dateGetter("yesterday"):
-            self.habits[habitID].streak += 1
-        self.habits[habitID].complete()
-        self.habitData[habitID] = self.habits[habitID].toDict
-        print(self.habits[habitID].toDict)
+    def completeHabit(self, HabitID):
+        # habitID, habitName = self.viewHabit(HabitID)
+        # if habitID is None:
+        #    return
+        if self.habits[HabitID].lastCompleted == Helper.dateGetter("yesterday"):
+            self.habits[HabitID].streak += 1
+        else:
+            self.habits[HabitID].streak = 1
+        self.habits[HabitID].complete()
+        self.habitData[HabitID] = self.habits[HabitID].toDict
+        print(self.habits[HabitID].toDict)
         Storage.saveData(self.habitData)
-        print(
-            f"From CompleteHabit: Habit |{habitID} - {habitName}| marked as completed."
-        )
+        print(f"From CompleteHabit: Habit |{HabitID} - {HabitID}| marked as completed.")
 
-    def unCompleteHabit(self, habitName):
-        habitID, habitName = self.viewHabit(habitName)
+    def unCompleteHabit(self, HabitID):
+        habitID, habitName = self.viewHabit(HabitID)
         if habitID is None:
             return
         self.habits[habitID].unComplete()
@@ -130,7 +134,7 @@ class HabitLogic:
 
     def loadHabits(self):
         for key, value in self.habitData.items():
-            habits = Habit(
+            habit = Habit(
                 value["Name"],
                 key,
                 value["IsCompleted"],
@@ -138,7 +142,7 @@ class HabitLogic:
                 value["Streak"],
                 value["LastCompleted"],
             )
-            self.habits[key] = habits
+            self.habits[key] = habit
 
 
 if __name__ == "__main__":

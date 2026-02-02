@@ -2,3 +2,32 @@ TODOS:
 
 -customize modal dialog
 -Capitalize words??
+
+#UI delete/edit controls
+
+#Validation for new habits
+-temporary "if not HabitName, i should probably make it so that it doesnt even run createhabit in the first place if not valid
+
+#Duplicate handling should:
+-Be exact, predictable, and always produce a unique result.
+
+#UI feedback should:
+-Make state changes obvious
+-Prevent confusion when an action doesn’t do what the user expects
+
+#Full streak logic (reset/miss handling)
+
+#Complete/Uncomplete
+-if the user uncompletes a habit in the same day make sure the lastCompleted day becomes the last day
+
+#UI logic
+-redesign code so that the UI doesn’t care how completion is stored. 
+UI should ask logic questions like:
+“is habit X completed on date D?”
+“set completion for habit X on date D to True/False”
+Even if right now you only support D = today.
+Then later, when you add backtracking:
+the UI just passes different D values
+storage changes behind the scenes
+UI doesn’t get rewritten
+That’s how you build “MVP now, upgrade later” without throwing everything away.

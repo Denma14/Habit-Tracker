@@ -9,7 +9,7 @@ def idGenerator(dataDict: dict):
     else:
         lastID = max(int(key) for key in dataDict.keys())
         id = lastID + 1
-    print(id)
+    # print(id)
     return id
 
 

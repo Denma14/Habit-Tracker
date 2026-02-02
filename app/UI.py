@@ -132,7 +132,8 @@ class MainWindow(QMainWindow):
         self.deleteWidgets()
         for key, value in self.HabitLogic.habitData.items():
             # Create habit widget--
-            habitWidget = QWidget(self.ScrollContent)
+            habitWidget = QPushButton(self.ScrollContent)
+            habitWidget.setProperty("HabitID", key)
             habitLayout = QHBoxLayout(habitWidget)
             habitWidget.setStyleSheet("background-color: red;")
             habitWidget.setFixedSize(425, 50)
@@ -155,7 +156,9 @@ class MainWindow(QMainWindow):
             habitCheckbox.setChecked(value["IsCompleted"])
             habitCheckbox.setStyleSheet("background-color: green;")
             habitCheckbox.stateChanged.connect(
-                lambda state, name=value["Name"]: self.habitStateChanged(state, name)
+                lambda state, key=habitWidget.property(
+                    "HabitID"
+                ): self.habitStateChanged(state, key)
             )
 
     def deleteWidgets(self):
@@ -169,11 +172,11 @@ class MainWindow(QMainWindow):
         self.addDialog.exec()
         self.loadHabits()
 
-    def habitStateChanged(self, state, habitName):
+    def habitStateChanged(self, state, habitID):
         if state == Qt.CheckState.Checked.value:
-            self.HabitLogic.completeHabit(habitName)
+            self.HabitLogic.completeHabit(habitID)
         else:
-            self.HabitLogic.unCompleteHabit(habitName)
+            self.HabitLogic.unCompleteHabit(habitID)
 
 
 def main():
