@@ -103,9 +103,6 @@ class HabitLogic:
             print(f"|{key}| - |{value}|")
 
     def completeHabit(self, HabitID):
-        # habitID, habitName = self.viewHabit(HabitID)
-        # if habitID is None:
-        #    return
         if self.habits[HabitID].lastCompleted == Helper.dateGetter("yesterday"):
             self.habits[HabitID].streak += 1
         else:
@@ -117,13 +114,10 @@ class HabitLogic:
         print(f"From CompleteHabit: Habit |{HabitID} - {HabitID}| marked as completed.")
 
     def unCompleteHabit(self, HabitID):
-        habitID, habitName = self.viewHabit(HabitID)
-        if habitID is None:
-            return
-        self.habits[habitID].unComplete()
-        self.habitData[habitID] = self.habits[habitID].toDict
+        self.habits[HabitID].unComplete()
+        self.habitData[HabitID] = self.habits[HabitID].toDict
         Storage.saveData(self.habitData)
-        print(f"Habit |{habitID} - {habitName}| marked as incompleted.")
+        print(f"Habit |{HabitID} - {HabitID}| marked as incompleted.")
 
     def checkdate(self):
         for key, value in self.habits.items():
