@@ -69,10 +69,10 @@ class HabitLogic:
         print(f"Habit |{newID} - {habitName}| created.")
 
     def deleteHabit(self, HabitID: int):
+        print(f"Habit |{HabitID} - {self.habitData[HabitID]["Name"]}| deleted.")
         self.habitData.pop(HabitID)
         self.habits.pop(HabitID)
         Storage.saveData(self.habitData)
-        print(f"Habit |{HabitID} - {self.habitData[HabitID]["Name"]}| deleted.")
 
     def updateHabit(self, HabitID, newHabitName):
         self.habitData[HabitID]["Name"] = newHabitName

@@ -4,6 +4,8 @@ TODOS:
 -Capitalize words??
 
 #UI delete/edit controls
+-made a Modal dialog where it will contain the things for edit and delete as well as future stats for the habit itself if expanding is
+considered.
 
 #Validation for new habits
 -temporary "if not HabitName, i should probably make it so that it doesnt even run createhabit in the first place if not valid

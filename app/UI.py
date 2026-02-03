@@ -55,6 +55,13 @@ class AddHabitDialog(QDialog):
         print(self.habitNameInput.text())
 
 
+class HabitProperty(QDialog):
+    def __init__(self):
+        super().__init__()
+
+        self.setWindowTitle("IDK")
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -148,13 +155,21 @@ class MainWindow(QMainWindow):
             habitName.setStyleSheet(
                 "background-color: blue;color: white; font-size: 20px; font-weight: bold;"
             )
-            habitName.setFixedSize(200, 50)
+            habitName.setFixedSize(200, 35)
 
             # Habit Checkbox
             habitCheckbox = QCheckBox(habitWidget)
             habitLayout.addWidget(habitCheckbox, alignment=Qt.AlignmentFlag.AlignCenter)
             habitCheckbox.setChecked(value["IsCompleted"])
             habitCheckbox.setStyleSheet("background-color: green;")
+
+            # Iput Handling
+            habitWidget.clicked.connect(
+                lambda checked, key=habitWidget.property(
+                    "HabitID"
+                ): self.onHabitClicked(checked, key)
+            )
+
             habitCheckbox.stateChanged.connect(
                 lambda state, key=habitWidget.property(
                     "HabitID"
@@ -173,10 +188,14 @@ class MainWindow(QMainWindow):
         self.loadHabits()
 
     def habitStateChanged(self, state, habitID):
+        print("habitID")
         if state == Qt.CheckState.Checked.value:
             self.HabitLogic.completeHabit(habitID)
         else:
             self.HabitLogic.unCompleteHabit(habitID)
+
+    def onHabitClicked(self, checked, HabitID):
+        print(f"Habit {HabitID} Clicked")
 
 
 def main():
