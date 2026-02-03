@@ -68,25 +68,19 @@ class HabitLogic:
         Storage.saveData(self.habitData)
         print(f"Habit |{newID} - {habitName}| created.")
 
-    def deleteHabit(self, habitName):
-        habitID, habitName = self.viewHabit(habitName)
-        if habitID is None:
-            return
-
-        self.habitData.pop(habitID)
-        self.habits.pop(habitID)
+    def deleteHabit(self, HabitID: int):
+        self.habitData.pop(HabitID)
+        self.habits.pop(HabitID)
         Storage.saveData(self.habitData)
-        print(f"Habit |{habitID} - {habitName}| deleted.")
+        print(f"Habit |{HabitID} - {self.habitData[HabitID]["Name"]}| deleted.")
 
-    def updateHabit(self, habitName, newHabitName):
-        habitID, habitName = self.viewHabit(habitName)
-        if habitID is None:
-            return
-
-        self.habitData[habitID]["Name"] = newHabitName
-        self.habits[habitID].name = newHabitName
+    def updateHabit(self, HabitID, newHabitName):
+        self.habitData[HabitID]["Name"] = newHabitName
+        self.habits[HabitID].name = newHabitName
         Storage.saveData(self.habitData)
-        print(f"Habit |{habitID} - {habitName}| updated to |{newHabitName}|")
+        print(
+            f"Habit |{HabitID} - {self.habitData[HabitID]["Name"]}| updated to |{newHabitName}|"
+        )
 
     def viewHabit(self, HabitID: int):
         searchQuery = None
