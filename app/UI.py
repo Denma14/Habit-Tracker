@@ -55,51 +55,12 @@ class AddHabitDialog(QDialog):
         print(self.habitNameInput.text())
 
 
-class HabitProperty(QDialog):
-    def __init__(self, habitLogic: Core.HabitLogic, habitID: int, parent=None):
+class EditHabit(QWidget):
+    def __init__(self, parent=None):
         super().__init__()
-        self.habitLogic = habitLogic
-        self.habitID = habitID
 
-        self.setWindowTitle(self.habitLogic.habitData[self.habitID]["Name"])
-        self.setGeometry(100, 100, 300, 300)
-        self.setFixedSize(300, 150)
-
-        self.mainWidget = QWidget(self)
-        self.mainWidget.setFixedSize(300, 150)
-        self.mainLayout = QVBoxLayout(self.mainWidget)
-        self.infoLabel = QLabel("Habit Information Coming Soon!", self.mainWidget)
-
-        self.deleteButton = QPushButton("Delete", self.mainWidget)
-        self.editButton = QPushButton("Edit", self.mainWidget)
-
-        self.btn = QToolButton(self)
-        self.btn.setText("Menu")
-        self.btn.setAutoRaise(True)
-        self.setCheckable = True
-
-        self.menu = QMenu(self.btn)
-        self.menu.addAction("Close")
-        self.menu.addAction("Edit")
-        self.btn.setMenu(self.menu)
-
-        self.btn.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
-
-        self.mainLayout.addWidget(self.btn)
-        self.mainLayout.addWidget(self.infoLabel)
-        self.mainLayout.addWidget(self.deleteButton)
-        self.mainLayout.addWidget(self.editButton)
-
-        self.deleteButton.clicked.connect(self.onDeleteButtonClicked)
-        self.editButton.clicked.connect(self.onEditButtonClicked)
-
-    def onDeleteButtonClicked(self):
-        print("Delete clicked")
-        self.habitLogic.deleteHabit(self.habitID)
-        self.close()
-
-    def onEditButtonClicked(self):
-        print("Edit clicked")
+        self.setParent(parent)
+        self.isVisible(False)
 
 
 class MainWindow(QMainWindow):
