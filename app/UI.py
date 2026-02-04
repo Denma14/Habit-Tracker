@@ -1,7 +1,7 @@
 # UI file
 import sys
 from PyQt6.QtWidgets import *
-from PyQt6.QtGui import QFont, QFontDatabase
+from PyQt6.QtGui import *
 from PyQt6.QtCore import Qt
 from . import Core
 from . import Styles
@@ -56,10 +56,50 @@ class AddHabitDialog(QDialog):
 
 
 class HabitProperty(QDialog):
-    def __init__(self):
+    def __init__(self, habitLogic: Core.HabitLogic, habitID: int, parent=None):
         super().__init__()
+        self.habitLogic = habitLogic
+        self.habitID = habitID
 
-        self.setWindowTitle("IDK")
+        self.setWindowTitle(self.habitLogic.habitData[self.habitID]["Name"])
+        self.setGeometry(100, 100, 300, 300)
+        self.setFixedSize(300, 150)
+
+        self.mainWidget = QWidget(self)
+        self.mainWidget.setFixedSize(300, 150)
+        self.mainLayout = QVBoxLayout(self.mainWidget)
+        self.infoLabel = QLabel("Habit Information Coming Soon!", self.mainWidget)
+
+        self.deleteButton = QPushButton("Delete", self.mainWidget)
+        self.editButton = QPushButton("Edit", self.mainWidget)
+
+        self.btn = QToolButton(self)
+        self.btn.setText("Menu")
+        self.btn.setAutoRaise(True)
+        self.setCheckable = True
+
+        self.menu = QMenu(self.btn)
+        self.menu.addAction("Close")
+        self.menu.addAction("Edit")
+        self.btn.setMenu(self.menu)
+
+        self.btn.setPopupMode(QToolButton.ToolButtonPopupMode.MenuButtonPopup)
+
+        self.mainLayout.addWidget(self.btn)
+        self.mainLayout.addWidget(self.infoLabel)
+        self.mainLayout.addWidget(self.deleteButton)
+        self.mainLayout.addWidget(self.editButton)
+
+        self.deleteButton.clicked.connect(self.onDeleteButtonClicked)
+        self.editButton.clicked.connect(self.onEditButtonClicked)
+
+    def onDeleteButtonClicked(self):
+        print("Delete clicked")
+        self.habitLogic.deleteHabit(self.habitID)
+        self.close()
+
+    def onEditButtonClicked(self):
+        print("Edit clicked")
 
 
 class MainWindow(QMainWindow):
@@ -139,7 +179,7 @@ class MainWindow(QMainWindow):
         self.deleteWidgets()
         for key, value in self.HabitLogic.habitData.items():
             # Create habit widget--
-            habitWidget = QPushButton(self.ScrollContent)
+            habitWidget = QLabel(self.ScrollContent)
             habitWidget.setProperty("HabitID", key)
             habitLayout = QHBoxLayout(habitWidget)
             habitWidget.setStyleSheet("background-color: red;")
@@ -163,18 +203,38 @@ class MainWindow(QMainWindow):
             habitCheckbox.setChecked(value["IsCompleted"])
             habitCheckbox.setStyleSheet("background-color: green;")
 
+            # Habit Options
+            habitOptions = QToolButton(habitWidget)
+            habitLayout.addWidget(habitOptions)
+            # habitOptions.setText("...")
+            habitOptions.setAutoRaise(True)
+            # habitOptions.setCheckable = True
+
+            act_edit = QAction("Edit", habitOptions)
+            act_delete = QAction("Delete", habitOptions)
+            act_view = QAction("View", habitOptions)
+
+            habitOptionsMenu = QMenu(habitOptions)
+            habitOptionsMenu.addAction(act_edit)
+            habitOptionsMenu.addSeparator()
+            habitOptionsMenu.addAction(act_delete)
+            habitOptionsMenu.addSeparator()
+            habitOptionsMenu.addAction(act_view)
+            habitOptions.setMenu(habitOptionsMenu)
+
+            habitOptions.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
+
             # Iput Handling
-            habitWidget.clicked.connect(
-                lambda checked, key=habitWidget.property(
-                    "HabitID"
-                ): self.onHabitClicked(checked, key)
-            )
 
             habitCheckbox.stateChanged.connect(
                 lambda state, key=habitWidget.property(
                     "HabitID"
                 ): self.habitStateChanged(state, key)
             )
+
+            act_edit.triggered.connect(self.onHabitClicked)
+            act_delete.triggered.connect(self.HabitLogic.deleteHabit(key))
+            act_view.triggered.connect(self.onHabitClicked)
 
     def deleteWidgets(self):
         for child in self.ScrollContent.children():
@@ -194,8 +254,8 @@ class MainWindow(QMainWindow):
         else:
             self.HabitLogic.unCompleteHabit(habitID)
 
-    def onHabitClicked(self, checked, HabitID):
-        print(f"Habit {HabitID} Clicked")
+    def onHabitClicked(self):
+        print("Menu Clicked")
 
 
 def main():
