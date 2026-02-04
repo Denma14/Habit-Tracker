@@ -184,7 +184,9 @@ class MainWindow(QMainWindow):
             habitLayout = QHBoxLayout(habitWidget)
             habitWidget.setStyleSheet("background-color: red;")
             habitWidget.setFixedSize(425, 50)
-            self.ScrollAreaLayout.addWidget(habitWidget)
+            self.ScrollAreaLayout.addWidget(
+                habitWidget, alignment=Qt.AlignmentFlag.AlignTop
+            )
 
             # Habit Title
             habitName = QLabel(habitWidget)
@@ -224,7 +226,7 @@ class MainWindow(QMainWindow):
 
             habitOptions.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
 
-            # Iput Handling
+            # Input Handling
 
             habitCheckbox.stateChanged.connect(
                 lambda state, key=habitWidget.property(
@@ -233,7 +235,11 @@ class MainWindow(QMainWindow):
             )
 
             act_edit.triggered.connect(self.onHabitClicked)
-            act_delete.triggered.connect(self.HabitLogic.deleteHabit(key))
+            act_delete.triggered.connect(
+                lambda state, key=habitWidget.property(
+                    "HabitID"
+                ): self.onDeleteHabitClicked(state, key)
+            )
             act_view.triggered.connect(self.onHabitClicked)
 
     def deleteWidgets(self):
@@ -256,6 +262,19 @@ class MainWindow(QMainWindow):
 
     def onHabitClicked(self):
         print("Menu Clicked")
+
+    def onEditHabitClicked(self, state, HabitID):
+        print("edit clicked")
+        self.loadHabits()
+
+    def onDeleteHabitClicked(self, state, HabitID):
+        print("Delete clicked")
+        self.HabitLogic.deleteHabit(HabitID)
+        self.loadHabits()
+
+    def onViewHabitClicked(self, state, HabitID):
+        print("edit clicked")
+        self.loadHabits()
 
 
 def main():
