@@ -56,11 +56,76 @@ class AddHabitDialog(QDialog):
 
 
 class EditHabit(QWidget):
-    def __init__(self, parent=None):
+    def __init__(self, habitlogic: Core.HabitLogic, parent=None):
         super().__init__()
 
         self.setParent(parent)
-        self.isVisible(False)
+        self.setHidden(True)
+        self.setGeometry(0, 0, self.parent().width(), self.parent().height())
+        self.setFixedSize(self.parent().width(), self.parent().height())
+
+        self.habitLogic = habitlogic
+
+        self.parentLayout = QVBoxLayout(self)
+
+        self.mainWidget = QWidget(self)
+        self.mainLayout = QVBoxLayout(self.mainWidget)
+
+        self.upperWidget = QWidget(self.mainWidget)
+        self.lowerWidget = QWidget(self.mainWidget)
+
+        self.upperLayout = QVBoxLayout(self.upperWidget)
+        self.lowerLayout = QHBoxLayout(self.lowerWidget)
+
+        self.habitNameLabel = QLabel(self.upperWidget)
+        self.habitNameLabel.setText("Habit Name")
+
+        self.editNameInput = QLineEdit(self.upperWidget)
+
+        self.confirmButton = QPushButton("confirm", self.lowerWidget)
+        self.cancelButton = QPushButton("Cancel", self.lowerWidget)
+
+        self.UIinit()
+
+    def UIinit(self):
+        # Styles
+        self.setStyleSheet("background-color: blue;")
+
+        self.upperWidget.setStyleSheet("background-color: red;")
+        self.lowerWidget.setStyleSheet("background-color: green;")
+
+        self.habitNameLabel.setStyleSheet("Background-color: black;")
+
+        # Widgets
+        self.parentLayout.addWidget(self.mainWidget)
+
+        self.mainLayout.addWidget(self.upperWidget)
+        self.mainLayout.addWidget(self.lowerWidget)
+
+        self.upperLayout.addWidget(
+            self.habitNameLabel,
+            alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft,
+        )
+        self.upperLayout.addWidget(self.editNameInput)
+
+        self.lowerLayout.addWidget(self.confirmButton)
+        self.lowerLayout.addWidget(self.cancelButton)
+
+    def loadUI(self, habitID: int):
+        self.habitNameLabel.setText(self.habitLogic.habitData[habitID]["Name"])
+        self.editNameInput.setText(self.habitLogic.habitData[habitID]["Name"])
+        self.setHidden(False)
+
+        # self.confirmButton.clicked.connect(lambda: self.onConfirm(habitID))
+        # self.cancelButton.clicked.connect(self.onCancel)
+
+    def onCancel(self):
+        self.setHidden(True)
+
+    def onConfirm(self, habitID: int, loadHabits: function):
+        self.habitLogic.updateHabit(habitID, self.editNameInput.text())
+        # loadHabits()
+        self.setHidden(True)
 
 
 class MainWindow(QMainWindow):
@@ -75,6 +140,7 @@ class MainWindow(QMainWindow):
 
         # Main Widget
         self.mainWidget = QWidget(self)
+        self.editHabitWidget = EditHabit(self.HabitLogic, self)
         self.setCentralWidget(self.mainWidget)
         self.mainLayout = QVBoxLayout(self.mainWidget)
 
@@ -195,7 +261,11 @@ class MainWindow(QMainWindow):
                 ): self.habitStateChanged(state, key)
             )
 
-            act_edit.triggered.connect(self.onHabitClicked)
+            act_edit.triggered.connect(
+                lambda state, key=habitWidget.property(
+                    "HabitID"
+                ): self.onEditHabitClicked(state, key)
+            )
             act_delete.triggered.connect(
                 lambda state, key=habitWidget.property(
                     "HabitID"
@@ -224,9 +294,13 @@ class MainWindow(QMainWindow):
     def onHabitClicked(self):
         print("Menu Clicked")
 
-    def onEditHabitClicked(self, state, HabitID):
+    def onEditHabitClicked(self, state=None, HabitID=None):
         print("edit clicked")
-        self.loadHabits()
+        self.editHabitWidget.loadUI(HabitID)
+        self.editHabitWidget.confirmButton.clicked.connect(
+            lambda: self.editHabitWidget.onConfirm(HabitID, self.loadHabits)
+        )
+        self.editHabitWidget.cancelButton.clicked.connect(self.editHabitWidget.onCancel)
 
     def onDeleteHabitClicked(self, state, HabitID):
         print("Delete clicked")

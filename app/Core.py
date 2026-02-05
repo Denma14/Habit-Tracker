@@ -77,10 +77,10 @@ class HabitLogic:
     def updateHabit(self, HabitID, newHabitName):
         self.habitData[HabitID]["Name"] = newHabitName
         self.habits[HabitID].name = newHabitName
-        Storage.saveData(self.habitData)
         print(
             f"Habit |{HabitID} - {self.habitData[HabitID]["Name"]}| updated to |{newHabitName}|"
         )
+        Storage.saveData(self.habitData)
 
     def viewHabit(self, HabitID: int):
         searchQuery = None

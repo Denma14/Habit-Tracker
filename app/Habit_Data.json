@@ -1,10 +1,10 @@
 {
     "4": {
-        "Name": "cook (1)",
+        "Name": "overcooked",
         "IsCompleted": false,
-        "Streak": 0,
+        "Streak": 1,
         "DateCreated": "2026-01-30",
-        "LastCompleted": null
+        "LastCompleted": "2026-02-05"
     },
     "5": {
         "Name": "cook (1)",
@@ -12,5 +12,54 @@
         "Streak": 2,
         "DateCreated": "2026-01-30",
         "LastCompleted": "2026-02-03"
+    },
+    "6": {
+        "Name": "gym",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-02-05",
+        "LastCompleted": null
+    },
+    "7": {
+        "Name": "reading",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-02-05",
+        "LastCompleted": null
+    },
+    "8": {
+        "Name": "read (1)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-02-05",
+        "LastCompleted": null
+    },
+    "9": {
+        "Name": "read (2)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-02-05",
+        "LastCompleted": null
+    },
+    "10": {
+        "Name": "read (3)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-02-05",
+        "LastCompleted": null
+    },
+    "11": {
+        "Name": "cook (2)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-02-05",
+        "LastCompleted": null
+    },
+    "12": {
+        "Name": "cook (3)",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-02-05",
+        "LastCompleted": null
     }
 }
