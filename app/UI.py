@@ -65,6 +65,7 @@ class EditHabit(QWidget):
         self.setFixedSize(self.parent().width(), self.parent().height())
 
         self.habitLogic = habitlogic
+        self.currentHabitID = 0
 
         self.parentLayout = QVBoxLayout(self)
 
@@ -111,13 +112,20 @@ class EditHabit(QWidget):
         self.lowerLayout.addWidget(self.confirmButton)
         self.lowerLayout.addWidget(self.cancelButton)
 
-    def loadUI(self, habitID: int):
-        self.habitNameLabel.setText(self.habitLogic.habitData[habitID]["Name"])
-        self.editNameInput.setText(self.habitLogic.habitData[habitID]["Name"])
+    def loadUI(self, habitID: int, loadHabits: function):
+        self.currentHabitID = habitID
+        self.habitNameLabel.setText(
+            self.habitLogic.habitData[self.currentHabitID]["Name"]
+        )
+        self.editNameInput.setText(
+            self.habitLogic.habitData[self.currentHabitID]["Name"]
+        )
         self.setHidden(False)
 
-        # self.confirmButton.clicked.connect(lambda: self.onConfirm(habitID))
-        # self.cancelButton.clicked.connect(self.onCancel)
+        self.confirmButton.clicked.connect(
+            lambda: self.onConfirm(self.currentHabitID, loadHabits)
+        )
+        self.cancelButton.clicked.connect(self.onCancel)
 
     def onCancel(self):
         self.setHidden(True)
@@ -256,9 +264,7 @@ class MainWindow(QMainWindow):
             # Input Handling
 
             habitCheckbox.stateChanged.connect(
-                lambda state, HabitId=habitWidget.property(
-                    "HabitID"
-                ): self.habitStateChanged(state, HabitId)
+                lambda state, HabitId=key: self.habitStateChanged(state, HabitId)
             )
 
             act_edit.triggered.connect(
@@ -292,11 +298,7 @@ class MainWindow(QMainWindow):
 
     def onEditHabitClicked(self, state=None, HabitID=None):
         print("edit clicked")
-        self.editHabitWidget.loadUI(HabitID)
-        self.editHabitWidget.confirmButton.clicked.connect(
-            lambda: self.editHabitWidget.onConfirm(HabitID, self.loadHabits)
-        )
-        self.editHabitWidget.cancelButton.clicked.connect(self.editHabitWidget.onCancel)
+        self.editHabitWidget.loadUI(HabitID, self.loadHabits)
 
     def onDeleteHabitClicked(self, state, HabitID):
         print("Delete clicked")
