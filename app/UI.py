@@ -124,7 +124,7 @@ class EditHabit(QWidget):
 
     def onConfirm(self, habitID: int, loadHabits: function):
         self.habitLogic.updateHabit(habitID, self.editNameInput.text())
-        # loadHabits()
+        loadHabits()
         self.setHidden(True)
 
 
@@ -256,20 +256,16 @@ class MainWindow(QMainWindow):
             # Input Handling
 
             habitCheckbox.stateChanged.connect(
-                lambda state, key=habitWidget.property(
+                lambda state, HabitId=habitWidget.property(
                     "HabitID"
-                ): self.habitStateChanged(state, key)
+                ): self.habitStateChanged(state, HabitId)
             )
 
             act_edit.triggered.connect(
-                lambda state, key=habitWidget.property(
-                    "HabitID"
-                ): self.onEditHabitClicked(state, key)
+                lambda state, HabitId=key: self.onEditHabitClicked(state, HabitId)
             )
             act_delete.triggered.connect(
-                lambda state, key=habitWidget.property(
-                    "HabitID"
-                ): self.onDeleteHabitClicked(state, key)
+                lambda state, HabitId=key: self.onDeleteHabitClicked(state, HabitId)
             )
             act_view.triggered.connect(self.onHabitClicked)
 
