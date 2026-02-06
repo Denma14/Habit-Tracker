@@ -56,7 +56,7 @@ class AddHabitDialog(QDialog):
 
 
 class EditHabit(QWidget):
-    def __init__(self, habitlogic: Core.HabitLogic, parent=None):
+    def __init__(self, habitlogic: Core.HabitLogic, loadHabbit: function, parent=None):
         super().__init__()
 
         self.setParent(parent)
@@ -65,6 +65,7 @@ class EditHabit(QWidget):
         self.setFixedSize(self.parent().width(), self.parent().height())
 
         self.habitLogic = habitlogic
+        self.loadHabits = loadHabbit
         self.currentHabitID = 0
 
         self.parentLayout = QVBoxLayout(self)
@@ -83,8 +84,14 @@ class EditHabit(QWidget):
 
         self.editNameInput = QLineEdit(self.upperWidget)
 
-        self.confirmButton = QPushButton("confirm", self.lowerWidget)
-        self.cancelButton = QPushButton("Cancel", self.lowerWidget)
+        self.confirmButton = QPushButton(
+            "confirm",
+            self.lowerWidget,
+            clicked=lambda: self.onConfirm(self.currentHabitID),
+        )
+        self.cancelButton = QPushButton(
+            "Cancel", self.lowerWidget, clicked=self.onCancel
+        )
 
         self.UIinit()
 
@@ -112,7 +119,7 @@ class EditHabit(QWidget):
         self.lowerLayout.addWidget(self.confirmButton)
         self.lowerLayout.addWidget(self.cancelButton)
 
-    def loadUI(self, habitID: int, loadHabits: function):
+    def loadUI(self, habitID: int):
         self.currentHabitID = habitID
         self.habitNameLabel.setText(
             self.habitLogic.habitData[self.currentHabitID]["Name"]
@@ -122,17 +129,12 @@ class EditHabit(QWidget):
         )
         self.setHidden(False)
 
-        self.confirmButton.clicked.connect(
-            lambda: self.onConfirm(self.currentHabitID, loadHabits)
-        )
-        self.cancelButton.clicked.connect(self.onCancel)
-
     def onCancel(self):
         self.setHidden(True)
 
-    def onConfirm(self, habitID: int, loadHabits: function):
+    def onConfirm(self, habitID: int):
         self.habitLogic.updateHabit(habitID, self.editNameInput.text())
-        loadHabits()
+        self.loadHabits()
         self.setHidden(True)
 
 
@@ -148,7 +150,7 @@ class MainWindow(QMainWindow):
 
         # Main Widget
         self.mainWidget = QWidget(self)
-        self.editHabitWidget = EditHabit(self.HabitLogic, self)
+        self.editHabitWidget = EditHabit(self.HabitLogic, self.loadHabits, self)
         self.setCentralWidget(self.mainWidget)
         self.mainLayout = QVBoxLayout(self.mainWidget)
 
@@ -298,7 +300,8 @@ class MainWindow(QMainWindow):
 
     def onEditHabitClicked(self, state=None, HabitID=None):
         print("edit clicked")
-        self.editHabitWidget.loadUI(HabitID, self.loadHabits)
+        self.editHabitWidget.loadUI(HabitID)
+        self.loadHabits()
 
     def onDeleteHabitClicked(self, state, HabitID):
         print("Delete clicked")
