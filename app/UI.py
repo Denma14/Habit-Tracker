@@ -16,7 +16,6 @@ class AddHabitWidget(QWidget):
 
         self.HabitLogic = HabitLogic
         self.setFixedHeight(40)
-        self.setStyleSheet("background-color: blue;" "border: 2px solid white;")
 
         self.mainLayout = QHBoxLayout(self)
         self.habitNameInput = QLineEdit("Enter new habit name", self)
@@ -130,6 +129,9 @@ class MainWindow(QMainWindow):
         # Main Widget
         self.mainWidget = QWidget(self)
         self.editHabitWidget = EditHabit(self.HabitLogic, self.loadHabits, self)
+        self.testWidget = QWidget(self.mainWidget)
+        self.testWidget.setFixedSize(50, 50)
+        self.testWidget.setStyleSheet("background-color: red;")
 
         self.setCentralWidget(self.mainWidget)
         self.mainLayout = QVBoxLayout(self.mainWidget)
