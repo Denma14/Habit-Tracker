@@ -8,16 +8,31 @@ from . import Styles
 
 
 class AddHabitWidget(QWidget):
-    def __init__(self, HabitLogic: Core.HabitLogic, parent=None):
+    def __init__(self, HabitLogic: Core.HabitLogic, loadHabits: function, parent=None):
         super().__init__()
+
+        self.parent = parent
+        self.loadHabits = loadHabits
 
         self.HabitLogic = HabitLogic
         self.setFixedHeight(40)
-        self.setStyleSheet("background-color: #222222;")
+        self.setStyleSheet("background-color: blue;")
+
+        self.mainLayout = QHBoxLayout(self)
+        self.habitNameInput = QLineEdit(self)
+        self.confirmButton = QPushButton("Confirm", self, clicked=self.onConfirm)
+
+        self.mainLayout.addWidget(self.habitNameInput)
+        self.mainLayout.addWidget(self.confirmButton)
+
+    def onConfirm(self):
+        self.HabitLogic.createHabit(self.habitNameInput.text())
+        self.habitNameInput.setText("Enter new habit name")
+        self.loadHabits()
 
 
 class EditHabit(QWidget):
-    def __init__(self, habitlogic: Core.HabitLogic, loadHabbit: function, parent=None):
+    def __init__(self, habitlogic: Core.HabitLogic, loadHabbits: function, parent=None):
         super().__init__()
 
         self.setParent(parent)
@@ -26,7 +41,7 @@ class EditHabit(QWidget):
         self.setFixedSize(self.parent().width(), self.parent().height())
 
         self.habitLogic = habitlogic
-        self.loadHabits = loadHabbit
+        self.loadHabits = loadHabbits
         self.currentHabitID = 0
 
         self.parentLayout = QVBoxLayout(self)
@@ -122,7 +137,9 @@ class MainWindow(QMainWindow):
         self.appName = QLabel("Habit Tracker", self.topWidget)
 
         # Add habit Widget
-        self.AddhabitWidget = AddHabitWidget(self.HabitLogic, self.topWidget)
+        self.AddhabitWidget = AddHabitWidget(
+            self.HabitLogic, self.loadHabits, self.mainWidget
+        )
 
         # Scroll Area
         self.ScrollArea = QScrollArea(self.mainWidget)
@@ -150,6 +167,7 @@ class MainWindow(QMainWindow):
         self.appName.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.topWidget.setStyleSheet("background-color: #222222;")
+        self.AddhabitWidget.setStyleSheet("background-color: #222222;")
         self.appName.setStyleSheet(
             "color: white; background-color: red; font-size: 20px; font-weight: bold;"
         )
