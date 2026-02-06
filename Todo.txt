@@ -3,10 +3,6 @@ TODOS:
 -customize modal dialog
 -Capitalize words??
 
-#UI delete/edit controls
-- Connect confirm/cancel once in `__init__`
-- Confirm handler uses `self.currentHabitID`
-
 #Add habit
 -temporary "if not HabitName, i should probably make it so that it doesnt even run createhabit in the first place if not valid
 -re-implement the habit remove the modal dialog thing and instead make it a new widget/popup widget

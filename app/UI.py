@@ -7,52 +7,13 @@ from . import Core
 from . import Styles
 
 
-class AddHabitDialog(QDialog):
+class AddHabitWidget(QWidget):
     def __init__(self, HabitLogic: Core.HabitLogic, parent=None):
         super().__init__()
 
         self.HabitLogic = HabitLogic
-
-        self.setWindowTitle("Add New Habit")
-        self.setGeometry(50, 50, 150, 150)
-        self.setFixedSize(300, 150)
-
-        self.dialogMainWidget = QWidget(self)
-        self.dialogMainWidget.setFixedSize(300, 150)
-
-        self.upperDialogWidget = QWidget(self.dialogMainWidget)
-        self.lowerDialogWidget = QWidget(self.dialogMainWidget)
-
-        self.dialogMainLayout = QVBoxLayout(self.dialogMainWidget)
-        # self.dialogLayout = QVBoxLayout(self.addHabitDialog)
-        self.upperDialogLayout = QHBoxLayout(self.upperDialogWidget)
-        self.lowerDialogLayout = QHBoxLayout(self.lowerDialogWidget)
-
-        self.habitNameInput = QLineEdit("Enter Habit Name", self.upperDialogWidget)
-        self.dialogConfirmButton = QPushButton("Add Habit", self.lowerDialogWidget)
-        self.dialogCancelButton = QPushButton("Cancel", self.lowerDialogWidget)
-
-        self.dialogMainLayout.addWidget(
-            self.upperDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
-        )
-        self.dialogMainLayout.addWidget(
-            self.lowerDialogWidget, alignment=Qt.AlignmentFlag.AlignCenter
-        )
-        self.upperDialogLayout.addWidget(
-            self.habitNameInput, alignment=Qt.AlignmentFlag.AlignCenter
-        )
-        self.lowerDialogLayout.addWidget(self.dialogConfirmButton)
-        self.lowerDialogLayout.addWidget(self.dialogCancelButton)
-
-        self.dialogConfirmButton.clicked.connect(self.confirmAddHabit)
-        self.dialogCancelButton.clicked.connect(self.close)
-
-    def confirmAddHabit(self):
-        self.HabitLogic.createHabit(self.habitNameInput.text())
-        self.close()
-
-    def addHabit(self):
-        print(self.habitNameInput.text())
+        self.setFixedHeight(40)
+        self.setStyleSheet("background-color: #222222;")
 
 
 class EditHabit(QWidget):
@@ -159,11 +120,9 @@ class MainWindow(QMainWindow):
         self.topLayout = QHBoxLayout(self.topWidget)
 
         self.appName = QLabel("Habit Tracker", self.topWidget)
-        self.addHabitButton = QPushButton(
-            "Add Habit", self.topWidget, clicked=self.onAddHabitClicked
-        )
 
-        self.addDialog = AddHabitDialog(self.HabitLogic, self)
+        # Add habit Widget
+        self.AddhabitWidget = AddHabitWidget(self.HabitLogic, self.topWidget)
 
         # Scroll Area
         self.ScrollArea = QScrollArea(self.mainWidget)
@@ -186,7 +145,6 @@ class MainWindow(QMainWindow):
         # /--Sizes
         self.topWidget.setFixedHeight(40)  # default is 40
         self.appName.setFixedSize(150, 30)
-        self.addHabitButton.setFixedSize(100, 30)
 
         # /--Alignments
         self.appName.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -203,14 +161,12 @@ class MainWindow(QMainWindow):
     def loadLayouts(self):
         # Main Widget
         self.mainLayout.addWidget(self.topWidget)
+        self.mainLayout.addWidget(self.AddhabitWidget)
         self.mainLayout.addWidget(self.ScrollArea)
         # /-Alignments
 
         # Top widget
         self.topLayout.addWidget(self.appName, alignment=Qt.AlignmentFlag.AlignLeft)
-        self.topLayout.addWidget(
-            self.addHabitButton, alignment=Qt.AlignmentFlag.AlignCenter
-        )
 
     def loadHabits(self):
         self.deleteWidgets()
@@ -283,10 +239,6 @@ class MainWindow(QMainWindow):
                 self.ScrollAreaLayout.removeWidget(child)
                 child.setParent(None)
                 child.deleteLater()
-
-    def onAddHabitClicked(self):
-        self.addDialog.exec()
-        self.loadHabits()
 
     def habitStateChanged(self, state, habitID):
         print("habitID")
