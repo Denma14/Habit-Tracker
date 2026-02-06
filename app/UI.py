@@ -11,16 +11,19 @@ class AddHabitWidget(QWidget):
     def __init__(self, HabitLogic: Core.HabitLogic, loadHabits: function, parent=None):
         super().__init__()
 
-        self.parent = parent
+        self.setParent(parent)
         self.loadHabits = loadHabits
 
         self.HabitLogic = HabitLogic
         self.setFixedHeight(40)
-        self.setStyleSheet("background-color: blue;")
+        self.setStyleSheet("background-color: blue;" "border: 2px solid white;")
 
         self.mainLayout = QHBoxLayout(self)
-        self.habitNameInput = QLineEdit(self)
+        self.habitNameInput = QLineEdit("Enter new habit name", self)
         self.confirmButton = QPushButton("Confirm", self, clicked=self.onConfirm)
+
+        self.habitNameInput.setStyleSheet("background-color: yellow;")
+        self.confirmButton.setStyleSheet("background-color: green;")
 
         self.mainLayout.addWidget(self.habitNameInput)
         self.mainLayout.addWidget(self.confirmButton)
@@ -127,6 +130,7 @@ class MainWindow(QMainWindow):
         # Main Widget
         self.mainWidget = QWidget(self)
         self.editHabitWidget = EditHabit(self.HabitLogic, self.loadHabits, self)
+
         self.setCentralWidget(self.mainWidget)
         self.mainLayout = QVBoxLayout(self.mainWidget)
 
@@ -140,7 +144,6 @@ class MainWindow(QMainWindow):
         self.AddhabitWidget = AddHabitWidget(
             self.HabitLogic, self.loadHabits, self.mainWidget
         )
-
         # Scroll Area
         self.ScrollArea = QScrollArea(self.mainWidget)
         # elf.topLayout.addWidget(self.ScrollArea)
