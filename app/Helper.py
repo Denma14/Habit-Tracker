@@ -13,7 +13,7 @@ def idGenerator(dataDict: dict):
     return id
 
 
-def duplicateChecker(dataDict: dict, habitName: str):  # Incomplete
+def duplicateChecker(dataDict: dict, habitName: str):  # To be removed from the app
     searchQuery = None
     duplicateNumber = 0
     for key, value in dataDict.items():
@@ -26,6 +26,10 @@ def duplicateChecker(dataDict: dict, habitName: str):  # Incomplete
         return f"{habitName} ({duplicateNumber})"
     elif not searchQuery:
         return habitName
+
+
+def nameValidator(name: str):  # Incomplete
+    pass
 
 
 def dateGetter(when: str = None):
