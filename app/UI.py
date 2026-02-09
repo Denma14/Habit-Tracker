@@ -11,11 +11,13 @@ class AddHabitWidget(QWidget):
     def __init__(self, HabitLogic: Core.HabitLogic, loadHabits: function, parent=None):
         super().__init__()
 
-        self.setParent(parent)
+        # self.setParent(parent)
         self.loadHabits = loadHabits
 
         self.HabitLogic = HabitLogic
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
         self.setFixedHeight(40)
+        self.setStyleSheet("background-color: #222222;" "")
 
         self.mainLayout = QHBoxLayout(self)
         self.habitNameInput = QLineEdit("Enter new habit name", self)
@@ -129,6 +131,7 @@ class MainWindow(QMainWindow):
         # Main Widget
         self.mainWidget = QWidget(self)
         self.editHabitWidget = EditHabit(self.HabitLogic, self.loadHabits, self)
+
         self.testWidget = QWidget(self.mainWidget)
         self.testWidget.setFixedSize(50, 50)
         self.testWidget.setStyleSheet("background-color: red;")
@@ -139,13 +142,13 @@ class MainWindow(QMainWindow):
         # top Widget
         self.topWidget = QWidget(self.mainWidget)
         self.topLayout = QHBoxLayout(self.topWidget)
-
         self.appName = QLabel("Habit Tracker", self.topWidget)
 
         # Add habit Widget
         self.AddhabitWidget = AddHabitWidget(
             self.HabitLogic, self.loadHabits, self.mainWidget
         )
+
         # Scroll Area
         self.ScrollArea = QScrollArea(self.mainWidget)
         # elf.topLayout.addWidget(self.ScrollArea)
@@ -172,11 +175,11 @@ class MainWindow(QMainWindow):
         self.appName.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.topWidget.setStyleSheet("background-color: #222222;")
-        self.AddhabitWidget.setStyleSheet("background-color: #222222;")
         self.appName.setStyleSheet(
             "color: white; background-color: red; font-size: 20px; font-weight: bold;"
         )
 
+        print(self.AddhabitWidget.styleSheet())
         # Apply to your Scroll Area or Widget
         self.ScrollArea.setStyleSheet(Styles.scrollbar_stylesheet)
         self.ScrollContent.setStyleSheet("background-color: #222222;")
