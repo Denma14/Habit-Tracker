@@ -7,13 +7,14 @@ TODOS:
 -temporary "if not HabitName, i should probably make it so that it doesnt even run createhabit in the first place if not valid
 -re-implement the habit remove the modal dialog thing and instead make it a new widget/popup widget
 
-#Duplicate handling should:
--Be exact, predictable, and always produce a unique result.
-
+#Name validator should:
+name = name.strip()
+if empty → “Name can’t be blank”
+if length > N → “Too long”
+if name in reserved_set → “Pick a different name”
 #UI feedback should:
 -Make state changes obvious
 -Prevent confusion when an action doesn’t do what the user expects
-
 #Full streak logic (reset/miss handling)
 
 #Complete/Uncomplete

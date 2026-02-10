@@ -30,8 +30,12 @@ class AddHabitWidget(QWidget):
         self.mainLayout.addWidget(self.confirmButton)
 
     def onConfirm(self):
-        self.HabitLogic.createHabit(self.habitNameInput.text())
-        self.habitNameInput.setText("Enter new habit name")
+        bool, xdx = self.HabitLogic.createHabit(self.habitNameInput.text())
+        print(bool, xdx)
+        if not bool:
+            self.habitNameInput.setText(xdx)
+        else:
+            self.habitNameInput.setText("Enter new habit name")
         self.loadHabits()
 
 

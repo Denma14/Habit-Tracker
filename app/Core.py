@@ -51,22 +51,25 @@ class HabitLogic:
         self.checkdate()
 
     def createHabit(self, habitName=None):
-        if not habitName:
-            return
-        print(habitName)
-        newID = Helper.idGenerator(self.habitData)
-        newHabit = Habit(
-            Helper.duplicateChecker(self.habits, habitName),
-            newID,
-            False,
-            Helper.dateGetter("today"),
-            0,
-        )  # New habits are not completed by default
+        bool, xdx = Helper.nameValidator(habitName, self.habits)
+        if not bool:
+            return bool, xdx
+        else:
+            print(xdx)
+            newID = Helper.idGenerator(self.habitData)
+            newHabit = Habit(
+                xdx,
+                newID,
+                False,
+                Helper.dateGetter("today"),
+                0,
+            )  # New habits are not completed by default
 
-        self.habits[newID] = newHabit
-        self.habitData[newID] = newHabit.toDict
-        Storage.saveData(self.habitData)
-        print(f"Habit |{newID} - {habitName}| created.")
+            self.habits[newID] = newHabit
+            self.habitData[newID] = newHabit.toDict
+            Storage.saveData(self.habitData)
+            print(f"Habit |{newID} - {xdx}| created.")
+            return bool, xdx
 
     def deleteHabit(self, HabitID: int):
         print(f"Habit |{HabitID} - {self.habitData[HabitID]["Name"]}| deleted.")

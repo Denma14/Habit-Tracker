@@ -15,21 +15,37 @@ def idGenerator(dataDict: dict):
 
 def duplicateChecker(dataDict: dict, habitName: str):  # To be removed from the app
     searchQuery = None
-    duplicateNumber = 0
     for key, value in dataDict.items():
         if habitName.lower() in value.name.lower():
             print(f"Duplicate habit found: |{key}| - |{value}|")
             searchQuery = key
-
-            duplicateNumber += 1
     if searchQuery:
-        return f"{habitName} ({duplicateNumber})"
+        return f"{habitName} {searchQuery}"
     elif not searchQuery:
         return habitName
 
 
-def nameValidator(name: str):  # Incomplete
-    pass
+def nameValidator(name: str, habitDict: dict):  # Incomplete
+    name = name.strip()
+    Invalidlist = [
+        "Enter new habit name",
+        "Name cannot be empty.",
+        "Invalid Name",
+        "Name cannot be longer than 20 characters.",
+        "Name already exists.",
+    ]
+    if not name:
+        return False, Invalidlist[1]
+    elif name in Invalidlist:
+        return False, Invalidlist[2]
+    elif len(name) > 20:
+        return False, Invalidlist[3]
+    else:
+        for key, value in habitDict.items():
+            if name.lower() in value.name.lower():
+                return False, Invalidlist[4]
+            else:
+                return True, name
 
 
 def dateGetter(when: str = None):
