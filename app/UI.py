@@ -47,6 +47,7 @@ class EditHabit(QWidget):
         self.setHidden(True)
         self.setGeometry(0, 0, self.parent().width(), self.parent().height())
         self.setFixedSize(self.parent().width(), self.parent().height())
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
 
         self.habitLogic = habitlogic
         self.loadHabits = loadHabbits
@@ -122,6 +123,73 @@ class EditHabit(QWidget):
         self.setHidden(True)
 
 
+class ViewHabit(QWidget):
+    def __init__(self, habitlogic: Core.HabitLogic, loadHabbits: function, parent=None):
+        super().__init__()
+
+        self.setParent(parent)
+        self.setHidden(True)
+        self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
+
+        self.setGeometry(0, 0, self.parent().width(), self.parent().height())
+        self.setFixedSize(self.parent().width(), self.parent().height())
+
+        self.habitLogic = habitlogic
+        self.loadHabits = loadHabbits
+        self.currentHabitID = 0
+
+        self.parentLayout = QVBoxLayout(self)
+
+        self.mainWidget = QWidget(self)
+        self.mainLayout = QVBoxLayout(self.mainWidget)
+
+        self.upperWidget = QWidget(self.mainWidget)
+        self.lowerWidget = QWidget(self.mainWidget)
+
+        self.upperLayout = QVBoxLayout(self.upperWidget)
+        self.lowerLayout = QHBoxLayout(self.lowerWidget)
+
+        self.habitNameLabel = QLabel(self.upperWidget)
+        self.habitNameLabel.setText("Habit Name")
+
+        self.backButton = QPushButton("Back", self.lowerWidget, clicked=self.onBack)
+
+        self.UIinit()
+
+    def UIinit(self):
+        self.setStyleSheet("background-color: blue;")
+
+        self.upperWidget.setStyleSheet("background-color: red;")
+        self.lowerWidget.setStyleSheet("background-color: green;")
+        self.habitNameLabel.setStyleSheet("Background-color: black;")
+
+        self.upperWidget.setFixedHeight(50)
+        self.habitNameLabel.setFixedHeight(30)
+
+        self.parentLayout.addWidget(self.mainWidget)
+
+        self.mainLayout.addWidget(self.upperWidget)
+        self.mainLayout.addWidget(self.lowerWidget)
+
+        self.upperLayout.addWidget(
+            self.backButton, alignment=Qt.AlignmentFlag.AlignRight
+        )
+        self.upperLayout.addWidget(
+            self.habitNameLabel,
+            alignment=Qt.AlignmentFlag.AlignHCenter,
+        )
+
+    def onBack(self):
+        self.setHidden(True)
+
+    def loadUI(self, habitID: int):
+        self.currentHabitID = habitID
+        self.habitNameLabel.setText(
+            self.habitLogic.habitData[self.currentHabitID]["Name"]
+        )
+        self.setHidden(False)
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -135,10 +203,7 @@ class MainWindow(QMainWindow):
         # Main Widget
         self.mainWidget = QWidget(self)
         self.editHabitWidget = EditHabit(self.HabitLogic, self.loadHabits, self)
-
-        self.testWidget = QWidget(self.mainWidget)
-        self.testWidget.setFixedSize(50, 50)
-        self.testWidget.setStyleSheet("background-color: red;")
+        self.viewHabitWidget = ViewHabit(self.HabitLogic, self.loadHabits, self)
 
         self.setCentralWidget(self.mainWidget)
         self.mainLayout = QVBoxLayout(self.mainWidget)
@@ -261,7 +326,9 @@ class MainWindow(QMainWindow):
             act_delete.triggered.connect(
                 lambda state, HabitId=key: self.onDeleteHabitClicked(state, HabitId)
             )
-            act_view.triggered.connect(self.onHabitClicked)
+            act_view.triggered.connect(
+                lambda state, HabitId=key: self.onViewHabitClicked(state, HabitId)
+            )
 
     def deleteWidgets(self):
         for child in self.ScrollContent.children():
@@ -291,8 +358,8 @@ class MainWindow(QMainWindow):
         self.loadHabits()
 
     def onViewHabitClicked(self, state, HabitID):
-        print("edit clicked")
-        self.loadHabits()
+        print("View clicked")
+        self.viewHabitWidget.loadUI(HabitID)
 
 
 def main():
