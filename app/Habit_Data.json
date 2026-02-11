@@ -40,5 +40,12 @@
         "Streak": 1,
         "DateCreated": "2026-02-05",
         "LastCompleted": "2026-02-05"
+    },
+    "10": {
+        "Name": "Crelly",
+        "IsCompleted": false,
+        "Streak": 0,
+        "DateCreated": "2026-02-11",
+        "LastCompleted": null
     }
 }

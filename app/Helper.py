@@ -41,11 +41,14 @@ def nameValidator(name: str, habitDict: dict):  # Incomplete
     elif len(name) > 20:
         return False, Invalidlist[3]
     else:
+        searchQuery = None
         for key, value in habitDict.items():
-            if name.lower() in value.name.lower():
-                return False, Invalidlist[4]
-            else:
-                return True, name
+            if name.lower() in value.name.lower().strip():
+                searchQuery = value.name
+        if searchQuery:
+            return False, Invalidlist[4]
+        else:
+            return True, name.capitalize()
 
 
 def dateGetter(when: str = None):
