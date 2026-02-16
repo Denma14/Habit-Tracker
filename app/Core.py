@@ -36,10 +36,13 @@ class Habit:
 
     def complete(self):
         self.isCompleted = True
-        self.lastCompleted = Helper.dateGetter("today")
+        self.lastCompleted = (
+            Helper.dateGetter()
+        )  # how far from today e.g 0 for today and 1 for yesterday
         if not self.streak:  # Incomplete figuring out how to do this
             self.streak += 1
-        self.completedDates.append(self.lastCompleted)
+        if self.lastCompleted not in self.completedDates:
+            self.completedDates.append(self.lastCompleted)
 
     def unComplete(self):
         self.isCompleted = False
@@ -65,7 +68,7 @@ class HabitLogic:
                 xdx,
                 newID,
                 False,
-                Helper.dateGetter("today"),
+                Helper.dateGetter(),  # how far from today e.g 0 for today and 1 for yesterday
             )  # New habits are not completed by default
 
             self.habits[newID] = newHabit
@@ -103,7 +106,9 @@ class HabitLogic:
             print(f"|{key}| - |{value}|")
 
     def completeHabit(self, HabitID):
-        if self.habits[HabitID].lastCompleted == Helper.dateGetter("yesterday"):
+        if self.habits[HabitID].lastCompleted == Helper.dateGetter(
+            1
+        ):  # how far from today e.g 0 for today and 1 for yesterday
             self.habits[HabitID].streak += 1
         else:
             self.habits[HabitID].streak = 1
@@ -121,7 +126,9 @@ class HabitLogic:
 
     def checkdate(self):
         for key, value in self.habits.items():
-            if value.lastCompleted != Helper.dateGetter("today"):
+            if (
+                value.lastCompleted != Helper.dateGetter()
+            ):  # how far from today e.g 0 for today and 1 for yesterday
                 self.habits[key].unComplete()
                 self.habitData[key] = self.habits[key].toDict
                 Storage.saveData(self.habitData)

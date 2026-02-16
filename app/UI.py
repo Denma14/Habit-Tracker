@@ -4,6 +4,7 @@ from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
 from PyQt6.QtCore import Qt
 from . import Core
+from . import Helper
 from . import Styles
 
 
@@ -147,12 +148,12 @@ class ViewHabit(QWidget):
         self.lowerWidget = QWidget(self.mainWidget)
 
         self.upperLayout = QVBoxLayout(self.upperWidget)
-        self.lowerLayout = QHBoxLayout(self.lowerWidget)
+        self.lowerLayout = QVBoxLayout(self.lowerWidget)
 
         self.habitNameLabel = QLabel(self.upperWidget)
         self.habitNameLabel.setText("Habit Name")
 
-        self.backButton = QPushButton("Back", self.lowerWidget, clicked=self.onBack)
+        self.backButton = QPushButton("Back", self.upperWidget, clicked=self.onBack)
 
         self.UIinit()
 
@@ -160,7 +161,7 @@ class ViewHabit(QWidget):
         self.setStyleSheet("background-color: blue;")
 
         self.upperWidget.setStyleSheet("background-color: red;")
-        self.lowerWidget.setStyleSheet("background-color: green;")
+        self.lowerWidget.setStyleSheet("background-color: yellow;")
         self.habitNameLabel.setStyleSheet("Background-color: black;")
 
         self.upperWidget.setFixedHeight(50)
@@ -187,7 +188,32 @@ class ViewHabit(QWidget):
         self.habitNameLabel.setText(
             self.habitLogic.habitData[self.currentHabitID]["Name"]
         )
+        self.loadDates(self.currentHabitID)
         self.setHidden(False)
+
+    def loadDates(self, habitID: int):
+        self.currentHabitID = habitID
+        self.deleteWidgets()
+        for i in range(14):
+            newDate = QLabel(
+                Helper.dateGetter(i, "abbr"), self.lowerWidget
+            )  # abbr = abbrieviation
+            newDate.date = Helper.dateGetter(i)
+            if (
+                newDate.date
+                in self.habitLogic.habitData[self.currentHabitID]["CompletedDates"]
+            ):
+                newDate.setStyleSheet("Background-color: green;")
+            else:
+                newDate.setStyleSheet("Background-color: red;")
+            self.lowerLayout.addWidget(newDate)
+
+    def deleteWidgets(self):
+        for child in self.lowerWidget.children():
+            if isinstance(child, QWidget):
+                self.lowerLayout.removeWidget(child)
+                child.setParent(None)
+                child.deleteLater()
 
 
 class MainWindow(QMainWindow):

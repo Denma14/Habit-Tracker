@@ -15,6 +15,7 @@ Later: make it interactive if you still care
 #Complete/Uncomplete
 -if the user uncompletes a habit in the same day make sure the lastCompleted day becomes the last day
 
+
 #UI logic
 -redesign code so that the UI doesn’t care how completion is stored. 
 UI should ask logic questions like:

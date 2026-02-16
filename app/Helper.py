@@ -51,12 +51,12 @@ def nameValidator(name: str, habitDict: dict):  # Incomplete
             return True, name.capitalize()
 
 
-def dateGetter(when: str = None):
-    if when == "today":
-        return datetime.today().strftime("%Y-%m-%d")
-    elif when == "yesterday":
-        yesterday = datetime.today() - timedelta(days=1)
-        return yesterday.strftime("%Y-%m-%d")
+def dateGetter(when: int = 0, type: str = "full"):  # how far from today
+    day = datetime.today() - timedelta(days=when)
+    if type == "full":
+        return day.strftime("%Y-%m-%d")
+    elif type == "abbr":
+        return day.strftime("%b %d %a")
 
 
 if __name__ == "__main__":

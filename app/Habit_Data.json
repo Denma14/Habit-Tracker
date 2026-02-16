@@ -3,6 +3,21 @@
         "Name": "Xdx",
         "IsCompleted": true,
         "Streak": 1,
+        "DateCreated": "2026-02-8",
+        "LastCompleted": "2026-02-16",
+        "CompletedDates": [
+            "2026-02-08",
+            "2026-02-09",
+            "2026-02-10",
+            "2026-02-11",
+            "2026-02-14",
+            "2026-02-16"
+        ]
+    },
+    "2": {
+        "Name": "Lololol",
+        "IsCompleted": true,
+        "Streak": 1,
         "DateCreated": "2026-02-16",
         "LastCompleted": "2026-02-16",
         "CompletedDates": [
