@@ -11,6 +11,7 @@ class Habit:
         id: int,
         isCompleted: bool,
         dateCreated: str,
+        completedDates: list = [],
         streak: int = 0,
         lastCompleted=None,
     ):
@@ -18,6 +19,7 @@ class Habit:
         self.id = id
         self.isCompleted = isCompleted
         self.dateCreated = dateCreated
+        self.completedDates = completedDates
         self.lastCompleted = lastCompleted
         self.streak = streak
 
@@ -29,6 +31,7 @@ class Habit:
             "Streak": self.streak,
             "DateCreated": self.dateCreated,
             "LastCompleted": self.lastCompleted,
+            "CompletedDates": self.completedDates,
         }
 
     def complete(self):
@@ -36,6 +39,7 @@ class Habit:
         self.lastCompleted = Helper.dateGetter("today")
         if not self.streak:  # Incomplete figuring out how to do this
             self.streak += 1
+        self.completedDates.append(self.lastCompleted)
 
     def unComplete(self):
         self.isCompleted = False
@@ -62,7 +66,6 @@ class HabitLogic:
                 newID,
                 False,
                 Helper.dateGetter("today"),
-                0,
             )  # New habits are not completed by default
 
             self.habits[newID] = newHabit
@@ -130,6 +133,7 @@ class HabitLogic:
                 key,
                 value["IsCompleted"],
                 value["DateCreated"],
+                value["CompletedDates"],
                 value["Streak"],
                 value["LastCompleted"],
             )

@@ -1,51 +1,12 @@
 {
-    "4": {
-        "Name": "too tight",
-        "IsCompleted": false,
+    "1": {
+        "Name": "Xdx",
+        "IsCompleted": true,
         "Streak": 1,
-        "DateCreated": "2026-01-30",
-        "LastCompleted": "2026-02-11"
-    },
-    "5": {
-        "Name": "xdx",
-        "IsCompleted": false,
-        "Streak": 2,
-        "DateCreated": "2026-01-30",
-        "LastCompleted": "2026-02-03"
-    },
-    "6": {
-        "Name": "gym",
-        "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-02-05",
-        "LastCompleted": null
-    },
-    "7": {
-        "Name": "reading",
-        "IsCompleted": false,
-        "Streak": 1,
-        "DateCreated": "2026-02-05",
-        "LastCompleted": "2026-02-05"
-    },
-    "8": {
-        "Name": "no bug?",
-        "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-02-05",
-        "LastCompleted": null
-    },
-    "9": {
-        "Name": "read (2)",
-        "IsCompleted": false,
-        "Streak": 1,
-        "DateCreated": "2026-02-05",
-        "LastCompleted": "2026-02-05"
-    },
-    "10": {
-        "Name": "Crelly",
-        "IsCompleted": false,
-        "Streak": 0,
-        "DateCreated": "2026-02-11",
-        "LastCompleted": null
+        "DateCreated": "2026-02-16",
+        "LastCompleted": "2026-02-16",
+        "CompletedDates": [
+            "2026-02-16"
+        ]
     }
 }
