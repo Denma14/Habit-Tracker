@@ -34,18 +34,36 @@ class Habit:
             "CompletedDates": self.completedDates,
         }
 
+    def getStreak(self):
+        self.streak = 0
+        if self.lastCompleted == Helper.dateGetter():
+            Counter = 0
+            for i in range(len(self.completedDates) - 1, -1, -1):  # reverses the list
+                if self.completedDates[i] == Helper.dateGetter(Counter):
+                    Counter += 1
+                    self.streak += 1
+        elif self.lastCompleted == Helper.dateGetter(1):
+            Counter = 1
+            for i in range(len(self.completedDates) - 1, -1, -1):  # reverses the list
+                if self.completedDates[i] == Helper.dateGetter(Counter):
+                    Counter += 1
+                    self.streak += 1
+
     def complete(self):
         self.isCompleted = True
         self.lastCompleted = (
             Helper.dateGetter()
         )  # how far from today e.g 0 for today and 1 for yesterday
-        if not self.streak:  # Incomplete figuring out how to do this
-            self.streak += 1
         if self.lastCompleted not in self.completedDates:
             self.completedDates.append(self.lastCompleted)
+            self.getStreak()
 
     def unComplete(self):
         self.isCompleted = False
+        if self.lastCompleted == Helper.dateGetter():
+            self.completedDates.remove(self.lastCompleted)
+            self.lastCompleted = self.completedDates[-1]
+            self.getStreak()
 
 
 class HabitLogic:
@@ -106,12 +124,6 @@ class HabitLogic:
             print(f"|{key}| - |{value}|")
 
     def completeHabit(self, HabitID):
-        if self.habits[HabitID].lastCompleted == Helper.dateGetter(
-            1
-        ):  # how far from today e.g 0 for today and 1 for yesterday
-            self.habits[HabitID].streak += 1
-        else:
-            self.habits[HabitID].streak = 1
         self.habits[HabitID].complete()
         self.habitData[HabitID] = self.habits[HabitID].toDict
         print(self.habits[HabitID].toDict)
