@@ -9,60 +9,42 @@ class Habit:
         self,
         name: str,
         id: int,
-        isCompleted: bool,
         dateCreated: str,
         completedDates: list = [],
         streak: int = 0,
-        lastCompleted=None,
     ):
         self.name = name
         self.id = id
-        self.isCompleted = isCompleted
         self.dateCreated = dateCreated
         self.completedDates = completedDates
-        self.lastCompleted = lastCompleted
         self.streak = streak
 
     @property
     def toDict(self):
         return {
             "Name": self.name,
-            "IsCompleted": self.isCompleted,
             "Streak": self.streak,
             "DateCreated": self.dateCreated,
-            "LastCompleted": self.lastCompleted,
             "CompletedDates": self.completedDates,
         }
 
     def getStreak(self):
         self.streak = 0
-        if self.lastCompleted == Helper.dateGetter():
-            Counter = 0
-            for i in range(len(self.completedDates) - 1, -1, -1):  # reverses the list
-                if self.completedDates[i] == Helper.dateGetter(Counter):
-                    Counter += 1
-                    self.streak += 1
-        elif self.lastCompleted == Helper.dateGetter(1):
-            Counter = 1
-            for i in range(len(self.completedDates) - 1, -1, -1):  # reverses the list
-                if self.completedDates[i] == Helper.dateGetter(Counter):
-                    Counter += 1
-                    self.streak += 1
+        counter = 0
+        while Helper.dateGetter(counter) in self.completedDates:
+            self.streak += 1
+            counter += 1
 
-    def complete(self):
-        self.isCompleted = True
-        self.lastCompleted = (
-            Helper.dateGetter()
-        )  # how far from today e.g 0 for today and 1 for yesterday
-        if self.lastCompleted not in self.completedDates:
-            self.completedDates.append(self.lastCompleted)
+    def complete(
+        self, date
+    ):  # already defaulted in the complete function in HabitLogic
+        if date not in self.completedDates:
+            self.completedDates.append(date)
             self.getStreak()
 
-    def unComplete(self):
-        self.isCompleted = False
-        if self.lastCompleted == Helper.dateGetter():
-            self.completedDates.remove(self.lastCompleted)
-            self.lastCompleted = self.completedDates[-1]
+    def unComplete(self, date):
+        if date in self.completedDates:
+            self.completedDates.remove(date)
             self.getStreak()
 
 
@@ -73,7 +55,6 @@ class HabitLogic:
 
         self.habits = {}
         self.loadHabits()
-        self.checkdate()
 
     def createHabit(self, habitName=None):
         bool, xdx = Helper.nameValidator(habitName, self.habits)
@@ -123,38 +104,27 @@ class HabitLogic:
         for key, value in self.habitData.items():
             print(f"|{key}| - |{value}|")
 
-    def completeHabit(self, HabitID):
-        self.habits[HabitID].complete()
+    def completeHabit(self, HabitID, date=Helper.dateGetter()):
+        self.habits[HabitID].complete(date)
         self.habitData[HabitID] = self.habits[HabitID].toDict
         print(self.habits[HabitID].toDict)
         Storage.saveData(self.habitData)
         print(f"From CompleteHabit: Habit |{HabitID} - {HabitID}| marked as completed.")
 
-    def unCompleteHabit(self, HabitID):
-        self.habits[HabitID].unComplete()
+    def unCompleteHabit(self, HabitID, date=Helper.dateGetter()):
+        self.habits[HabitID].unComplete(date)
         self.habitData[HabitID] = self.habits[HabitID].toDict
         Storage.saveData(self.habitData)
         print(f"Habit |{HabitID} - {HabitID}| marked as incompleted.")
-
-    def checkdate(self):
-        for key, value in self.habits.items():
-            if (
-                value.lastCompleted != Helper.dateGetter()
-            ):  # how far from today e.g 0 for today and 1 for yesterday
-                self.habits[key].unComplete()
-                self.habitData[key] = self.habits[key].toDict
-                Storage.saveData(self.habitData)
 
     def loadHabits(self):
         for key, value in self.habitData.items():
             habit = Habit(
                 value["Name"],
                 key,
-                value["IsCompleted"],
                 value["DateCreated"],
                 value["CompletedDates"],
                 value["Streak"],
-                value["LastCompleted"],
             )
             self.habits[key] = habit
 

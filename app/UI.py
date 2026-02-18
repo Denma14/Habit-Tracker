@@ -353,13 +353,15 @@ class MainWindow(QMainWindow):
                 newCheckbox.setFixedSize(20, 20)
                 newCheckbox.setStyleSheet("background-color: green;")
                 habitWidgetRightLayout.addWidget(newCheckbox)
-                newCheckbox.date = Helper.dateGetter(i)
-                if newCheckbox.date in value["CompletedDates"]:
+                newCheckbox.setProperty("Date", Helper.dateGetter(i))
+                if newCheckbox.property("Date") in value["CompletedDates"]:
                     newCheckbox.setCheckState(Qt.CheckState.Checked)
                 else:
                     newCheckbox.setCheckState(Qt.CheckState.Unchecked)
                 newCheckbox.stateChanged.connect(
-                    lambda state, HabitId=key: self.habitStateChanged(state, HabitId)
+                    lambda state, HabitId=key: self.habitStateChanged(
+                        state, HabitId, newCheckbox.property("Date")
+                    )
                 )
 
             # Habit Options
@@ -396,12 +398,13 @@ class MainWindow(QMainWindow):
                 child.setParent(None)
                 child.deleteLater()
 
-    def habitStateChanged(self, state, habitID):
-        print("habitID")
+    def habitStateChanged(self, state, habitID, date):
+        print(habitID, date)
+
         if state == Qt.CheckState.Checked.value:
-            self.HabitLogic.completeHabit(habitID)
+            self.HabitLogic.completeHabit(habitID, date)
         else:
-            self.HabitLogic.unCompleteHabit(habitID)
+            self.HabitLogic.unCompleteHabit(habitID, date)
 
     def onHabitClicked(self):
         print("Menu Clicked")

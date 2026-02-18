@@ -1,7 +1,14 @@
-from datetime import datetime, timedelta
-
-# Create a date object
-# For a specific date:
-day = datetime.today() - timedelta(days=0)
-
-print(day.strftime("%A"))
+list = [
+    "2026-02-14",
+    "2026-02-09",
+    "2026-02-10",
+    "2026-02-18",
+    "2026-02-16",
+    "2026-02-11",
+    "2026-02-13",
+    "2026-02-15",
+    "2026-02-17",
+    "2026-02-08",
+]
+list.sort()
+print(max(list))
