@@ -359,9 +359,9 @@ class MainWindow(QMainWindow):
                 else:
                     newCheckbox.setCheckState(Qt.CheckState.Unchecked)
                 newCheckbox.stateChanged.connect(
-                    lambda state, HabitId=key: self.habitStateChanged(
-                        state, HabitId, newCheckbox.property("Date")
-                    )
+                    lambda state, HabitId=key, date=newCheckbox.property(
+                        "Date"
+                    ): self.habitStateChanged(state, HabitId, date)
                 )
 
             # Habit Options
