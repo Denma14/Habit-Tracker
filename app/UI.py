@@ -153,6 +153,8 @@ class ViewHabit(QWidget):
         self.habitNameLabel = QLabel(self.upperWidget)
         self.habitNameLabel.setText("Habit Name")
 
+        self.streakLabel = QLabel("Streak", self.upperWidget)
+
         self.backButton = QPushButton("Back", self.upperWidget, clicked=self.onBack)
 
         self.UIinit()
@@ -173,6 +175,9 @@ class ViewHabit(QWidget):
         self.mainLayout.addWidget(self.lowerWidget)
 
         self.upperLayout.addWidget(
+            self.streakLabel, alignment=Qt.AlignmentFlag.AlignLeft
+        )
+        self.upperLayout.addWidget(
             self.backButton, alignment=Qt.AlignmentFlag.AlignRight
         )
         self.upperLayout.addWidget(
@@ -187,6 +192,9 @@ class ViewHabit(QWidget):
         self.currentHabitID = habitID
         self.habitNameLabel.setText(
             self.habitLogic.habitData[self.currentHabitID]["Name"]
+        )
+        self.streakLabel.setText(
+            f"Streak: {self.habitLogic.habitData[self.currentHabitID]['Streak']}"
         )
         self.loadDates(self.currentHabitID)
         self.setHidden(False)
@@ -342,7 +350,7 @@ class MainWindow(QMainWindow):
 
             for i in range(4):
                 newCheckbox = QCheckBox(habitWidgetRight)
-                newCheckbox.setFixedSize(15, 15)
+                newCheckbox.setFixedSize(20, 20)
                 newCheckbox.setStyleSheet("background-color: green;")
                 habitWidgetRightLayout.addWidget(newCheckbox)
                 newCheckbox.date = Helper.dateGetter(i)

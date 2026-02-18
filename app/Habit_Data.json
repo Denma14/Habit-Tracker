@@ -2,7 +2,7 @@
     "1": {
         "Name": "Xdx",
         "IsCompleted": true,
-        "Streak": 1,
+        "Streak": 6,
         "DateCreated": "2026-02-8",
         "LastCompleted": "2026-02-18",
         "CompletedDates": [
@@ -14,6 +14,7 @@
             "2026-02-14",
             "2026-02-15",
             "2026-02-16",
+            "2026-02-17",
             "2026-02-18"
         ]
     },
