@@ -292,45 +292,74 @@ class MainWindow(QMainWindow):
     def loadHabits(self):
         self.deleteWidgets()
         for key, value in self.HabitLogic.habitData.items():
-            # Create habit widget--
+            # Instances --
             habitWidget = QLabel(self.ScrollContent)
-            habitWidget.setProperty("HabitID", key)
-            habitLayout = QHBoxLayout(habitWidget)
-            habitWidget.setStyleSheet("background-color: red;")
-            habitWidget.setFixedSize(425, 50)
-            self.ScrollAreaLayout.addWidget(
-                habitWidget, alignment=Qt.AlignmentFlag.AlignTop
-            )
+            habitWidgetRight = QLabel(habitWidget)
+            habitWidgetLeft = QLabel(habitWidget)
 
-            # Habit Title
-            habitName = QLabel(habitWidget)
+            habitName = QLabel(value["Name"], habitWidget)
 
-            habitLayout.addWidget(habitName)
-            habitName.setText(value["Name"])
-            habitName.setAlignment(Qt.AlignmentFlag.AlignCenter)
-            habitName.setStyleSheet(
-                "background-color: blue;color: white; font-size: 20px; font-weight: bold;"
-            )
-            habitName.setFixedSize(200, 35)
-
-            # Habit Checkbox
-            habitCheckbox = QCheckBox(habitWidget)
-            habitLayout.addWidget(habitCheckbox, alignment=Qt.AlignmentFlag.AlignCenter)
-            habitCheckbox.setChecked(value["IsCompleted"])
-            habitCheckbox.setStyleSheet("background-color: green;")
-
-            # Habit Options
             habitOptions = QToolButton(habitWidget)
-            habitLayout.addWidget(habitOptions)
-            # habitOptions.setText("...")
-            habitOptions.setAutoRaise(True)
-            # habitOptions.setCheckable = True
 
             act_edit = QAction("Edit", habitOptions)
             act_delete = QAction("Delete", habitOptions)
             act_view = QAction("View", habitOptions)
 
             habitOptionsMenu = QMenu(habitOptions)
+
+            # Layouts --
+            habitLayout = QHBoxLayout(habitWidget)
+            habitWidgetRightLayout = QHBoxLayout(habitWidgetRight)
+            habitwidgetLeftLayout = QHBoxLayout(habitWidgetLeft)
+
+            # Properties --
+            habitWidget.setProperty("HabitID", key)
+
+            # Styles --
+            habitWidget.setFixedSize(425, 50)
+            habitName.setFixedSize(200, 35)
+
+            habitWidget.setStyleSheet("background-color: red;")
+            habitName.setStyleSheet(
+                "background-color: blue;color: white; font-size: 20px; font-weight: bold;"
+            )
+
+            habitWidgetLeft.setStyleSheet("background-color: #222222;")
+            habitWidgetRight.setStyleSheet("background-color: #222222;")
+
+            # Layout handling
+            self.ScrollAreaLayout.addWidget(
+                habitWidget, alignment=Qt.AlignmentFlag.AlignTop
+            )
+            habitLayout.addWidget(habitWidgetLeft)
+            habitLayout.addWidget(habitWidgetRight)
+
+            habitwidgetLeftLayout.addWidget(
+                habitName, alignment=Qt.AlignmentFlag.AlignCenter
+            )
+
+            habitLayout.addWidget(habitOptions)
+
+            for i in range(4):
+                newCheckbox = QCheckBox(habitWidgetRight)
+                newCheckbox.setFixedSize(15, 15)
+                newCheckbox.setStyleSheet("background-color: green;")
+                habitWidgetRightLayout.addWidget(newCheckbox)
+                newCheckbox.date = Helper.dateGetter(i)
+                if newCheckbox.date in value["CompletedDates"]:
+                    newCheckbox.setCheckState(Qt.CheckState.Checked)
+                else:
+                    newCheckbox.setCheckState(Qt.CheckState.Unchecked)
+                newCheckbox.stateChanged.connect(
+                    lambda state, HabitId=key: self.habitStateChanged(state, HabitId)
+                )
+
+            # Habit Options
+
+            # habitOptions.setText("...")
+            habitOptions.setAutoRaise(True)
+            # habitOptions.setCheckable = True
+
             habitOptionsMenu.addAction(act_edit)
             habitOptionsMenu.addSeparator()
             habitOptionsMenu.addAction(act_delete)
@@ -341,10 +370,6 @@ class MainWindow(QMainWindow):
             habitOptions.setPopupMode(QToolButton.ToolButtonPopupMode.InstantPopup)
 
             # Input Handling
-
-            habitCheckbox.stateChanged.connect(
-                lambda state, HabitId=key: self.habitStateChanged(state, HabitId)
-            )
 
             act_edit.triggered.connect(
                 lambda state, HabitId=key: self.onEditHabitClicked(state, HabitId)

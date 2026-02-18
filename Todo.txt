@@ -1,20 +1,6 @@
 TODOS:
 
--customize modal dialog
--Capitalize words??
-
-#Full streak logic (reset/miss handling)
-Ship this order
-Read-only last 14 days strip (high motivation, low complexity)
-“Recent dates” list under it
-Later: make it interactive if you still care
-
-#Edit habit
--add validator
-
-#Complete/Uncomplete
--if the user uncompletes a habit in the same day make sure the lastCompleted day becomes the last day
-
+maybe add backtracking for the user. it might be cool and easier to do now with the current system.
 
 #UI logic
 -redesign code so that the UI doesn’t care how completion is stored. 
