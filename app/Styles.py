@@ -1,5 +1,5 @@
 scrollbar_stylesheet = """
-    QScrollBar:vertical {
+    QScrollBar::vertical {
         border: none;
         background: #000000; /* Track color */
         width: 5px;

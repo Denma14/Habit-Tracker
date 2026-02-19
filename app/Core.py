@@ -66,7 +66,6 @@ class HabitLogic:
             newHabit = Habit(
                 xdx,
                 newID,
-                False,
                 Helper.dateGetter(),  # how far from today e.g 0 for today and 1 for yesterday
             )  # New habits are not completed by default
 

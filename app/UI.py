@@ -147,7 +147,7 @@ class ViewHabit(QWidget):
         self.upperWidget = QWidget(self.mainWidget)
         self.lowerWidget = QWidget(self.mainWidget)
 
-        self.upperLayout = QVBoxLayout(self.upperWidget)
+        self.upperLayout = QHBoxLayout(self.upperWidget)
         self.lowerLayout = QVBoxLayout(self.lowerWidget)
 
         self.habitNameLabel = QLabel(self.upperWidget)
@@ -178,11 +178,11 @@ class ViewHabit(QWidget):
             self.streakLabel, alignment=Qt.AlignmentFlag.AlignLeft
         )
         self.upperLayout.addWidget(
-            self.backButton, alignment=Qt.AlignmentFlag.AlignRight
-        )
-        self.upperLayout.addWidget(
             self.habitNameLabel,
             alignment=Qt.AlignmentFlag.AlignHCenter,
+        )
+        self.upperLayout.addWidget(
+            self.backButton, alignment=Qt.AlignmentFlag.AlignRight
         )
 
     def onBack(self):
@@ -259,6 +259,11 @@ class MainWindow(QMainWindow):
         self.ScrollContent = QWidget(self.ScrollArea)
 
         self.ScrollAreaLayout = QVBoxLayout(self.ScrollContent)
+        self.ScrollAreaLayout.setContentsMargins(5, 10, 5, 10)
+        self.ScrollAreaLayout.setSpacing(5)
+        self.ScrollAreaLayout.setAlignment(Qt.AlignmentFlag.AlignTop)
+        # self.ScrollAreaLayout.addStretch(1)  # <-- important
+
         self.ScrollArea.setWidget(self.ScrollContent)
 
         self.loadStyles()
@@ -295,10 +300,21 @@ class MainWindow(QMainWindow):
         # /-Alignments
 
         # Top widget
-        self.topLayout.addWidget(self.appName, alignment=Qt.AlignmentFlag.AlignLeft)
+        self.topLayout.addWidget(self.appName, alignment=Qt.AlignmentFlag.AlignCenter)
 
     def loadHabits(self):
         self.deleteWidgets()
+
+        dateWidget = QWidget(self.ScrollContent)
+        self.ScrollAreaLayout.insertWidget(
+            self.ScrollAreaLayout.count(),  # index before the stretch
+            dateWidget,
+            alignment=Qt.AlignmentFlag.AlignHCenter,
+        )
+        dateWidgetLayout = QHBoxLayout(dateWidget)
+        dateWidget.setStyleSheet("background-color: yellow;")
+        dateWidget.setFixedSize(450, 50)
+
         for key, value in self.HabitLogic.habitData.items():
             # Instances --
             habitWidget = QLabel(self.ScrollContent)
@@ -324,7 +340,7 @@ class MainWindow(QMainWindow):
             habitWidget.setProperty("HabitID", key)
 
             # Styles --
-            habitWidget.setFixedSize(425, 50)
+            habitWidget.setFixedSize(450, 50)
             habitName.setFixedSize(200, 35)
 
             habitWidget.setStyleSheet("background-color: red;")
@@ -336,8 +352,10 @@ class MainWindow(QMainWindow):
             habitWidgetRight.setStyleSheet("background-color: #222222;")
 
             # Layout handling
-            self.ScrollAreaLayout.addWidget(
-                habitWidget, alignment=Qt.AlignmentFlag.AlignTop
+            self.ScrollAreaLayout.insertWidget(
+                self.ScrollAreaLayout.count(),
+                habitWidget,
+                alignment=Qt.AlignmentFlag.AlignHCenter,
             )
             habitLayout.addWidget(habitWidgetLeft)
             habitLayout.addWidget(habitWidgetRight)
@@ -392,11 +410,12 @@ class MainWindow(QMainWindow):
             )
 
     def deleteWidgets(self):
-        for child in self.ScrollContent.children():
-            if isinstance(child, QWidget):
-                self.ScrollAreaLayout.removeWidget(child)
-                child.setParent(None)
-                child.deleteLater()
+        # remove everything except the final stretch item (if you add one)
+        while self.ScrollAreaLayout.count() > 0:
+            item = self.ScrollAreaLayout.takeAt(0)
+            w = item.widget()
+            if w:
+                w.deleteLater()
 
     def habitStateChanged(self, state, habitID, date):
         print(habitID, date)
