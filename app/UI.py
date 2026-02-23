@@ -304,16 +304,7 @@ class MainWindow(QMainWindow):
 
     def loadHabits(self):
         self.deleteWidgets()
-
-        dateWidget = QWidget(self.ScrollContent)
-        self.ScrollAreaLayout.insertWidget(
-            self.ScrollAreaLayout.count(),  # index before the stretch
-            dateWidget,
-            alignment=Qt.AlignmentFlag.AlignHCenter,
-        )
-        dateWidgetLayout = QHBoxLayout(dateWidget)
-        dateWidget.setStyleSheet("background-color: yellow;")
-        dateWidget.setFixedSize(450, 50)
+        self.dateBarInit()
 
         for key, value in self.HabitLogic.habitData.items():
             # Instances --
@@ -416,6 +407,27 @@ class MainWindow(QMainWindow):
             w = item.widget()
             if w:
                 w.deleteLater()
+
+    def dateBarInit(self):
+        dateWidget = QWidget(self.ScrollContent)
+        self.ScrollAreaLayout.insertWidget(
+            self.ScrollAreaLayout.count(),  # index before the stretch
+            dateWidget,
+            alignment=Qt.AlignmentFlag.AlignHCenter,
+        )
+        dateWidgetLayout = QHBoxLayout(dateWidget)
+        dateWidgetLayout.setAlignment(Qt.AlignmentFlag.AlignRight)
+        dateWidgetLayout.setContentsMargins(0, 0, 60, 0)
+        dateWidgetLayout.setSpacing(20)
+        dateWidget.setStyleSheet("background-color: yellow;")
+        dateWidget.setFixedSize(450, 50)
+
+        for i in range(4):
+            newDate = QLabel(dateWidget)
+            newDate.setFixedSize(25, 20)
+            newDate.setStyleSheet("background-color: green;")
+            dateWidgetLayout.addWidget(newDate, alignment=Qt.AlignmentFlag.AlignCenter)
+            newDate.setText(Helper.dateGetter(i, "day"))
 
     def habitStateChanged(self, state, habitID, date):
         print(habitID, date)

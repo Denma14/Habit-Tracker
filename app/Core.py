@@ -30,10 +30,16 @@ class Habit:
 
     def getStreak(self):
         self.streak = 0
-        counter = 0
-        while Helper.dateGetter(counter) in self.completedDates:
-            self.streak += 1
-            counter += 1
+        if max(self.completedDates) == Helper.dateGetter(0):
+            counter = 0
+            while Helper.dateGetter(counter) in self.completedDates:
+                self.streak += 1
+                counter += 1
+        elif max(self.completedDates) == Helper.dateGetter(1):
+            counter = 1
+            while Helper.dateGetter(counter) in self.completedDates:
+                self.streak += 1
+                counter += 1
 
     def complete(
         self, date

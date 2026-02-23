@@ -57,6 +57,8 @@ def dateGetter(when: int = 0, type: str = "full"):  # how far from today
         return day.strftime("%Y-%m-%d")
     elif type == "abbr":
         return day.strftime("%b %d %a")
+    elif type == "day":
+        return day.strftime("%a")
 
 
 if __name__ == "__main__":
