@@ -1,7 +1,7 @@
 {
     "1": {
         "Name": "AB3",
-        "Streak": 11,
+        "Streak": 12,
         "DateCreated": "2026-02-8",
         "CompletedDates": [
             "2026-02-08",
@@ -15,10 +15,11 @@
             "2026-02-17",
             "2026-02-18",
             "2026-02-19",
-            "2026-02-22",
+            "2026-02-20",
             "2026-02-23",
+            "2026-02-22",
             "2026-02-21",
-            "2026-02-20"
+            "2026-02-24"
         ]
     },
     "2": {
@@ -66,18 +67,6 @@
         "Name": "Aquwa",
         "Streak": 0,
         "DateCreated": "2026-02-23",
-        "CompletedDates": []
-    },
-    "6": {
-        "Name": "Fsafasfasname",
-        "Streak": 0,
-        "DateCreated": "2026-02-24",
-        "CompletedDates": []
-    },
-    "7": {
-        "Name": "Fgewadfsa",
-        "Streak": 0,
-        "DateCreated": "2026-02-24",
         "CompletedDates": []
     }
 }

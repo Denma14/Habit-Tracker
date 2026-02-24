@@ -31,7 +31,7 @@ class AddHabitWidget(QWidget):
         self.habitNameInput = QLineEdit("Enter new habit name", self)
         self.confirmButton = QPushButton("Confirm", self, clicked=self.onConfirm)
 
-        self.habitNameInput.setStyleSheet("background-color: yellow;")
+        self.habitNameInput.setStyleSheet("font-weight: bold;")
         self.confirmButton.setStyleSheet("background-color: green;")
 
         self.mainLayout.addWidget(self.habitNameInput)
@@ -291,9 +291,7 @@ class MainWindow(QMainWindow):
         self.appName.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.topWidget.setStyleSheet("background-color: #222222;")
-        self.appName.setStyleSheet(
-            "color: white; background-color: red; font-size: 20px; font-weight: bold;"
-        )
+        self.appName.setStyleSheet("color: white; font-size: 20px; font-weight: bold;")
 
         print(self.AddhabitWidget.styleSheet())
         # Apply to your Scroll Area or Widget
@@ -343,13 +341,11 @@ class MainWindow(QMainWindow):
             habitName.setFixedHeight(30)
             habitwidgetLeftLayout.setContentsMargins(0, 0, 0, 0)
 
-            habitWidget.setStyleSheet("background-color: red;")
-            habitName.setStyleSheet(
-                "background-color: blue;color: white; font-size: 20px; font-weight: bold;"
-            )
+            habitWidget.setStyleSheet("background-color: #171616; border-radius: 5px;")
+            habitName.setStyleSheet("color: white; font-size: 20px; font-weight: bold;")
 
-            habitWidgetLeft.setStyleSheet("background-color: #222222;")
-            habitWidgetRight.setStyleSheet("background-color: #222222;")
+            # habitWidgetLeft.setStyleSheet("background-color: #222222;")
+            # habitWidgetRight.setStyleSheet("background-color: #222222;")
 
             # Layout handling
             self.ScrollAreaLayout.insertWidget(
@@ -427,16 +423,16 @@ class MainWindow(QMainWindow):
         dateWidgetLayout = QHBoxLayout(dateWidget)
         dateWidgetLayout.setAlignment(Qt.AlignmentFlag.AlignRight)
         dateWidgetLayout.setContentsMargins(0, 0, 60, 0)
-        dateWidgetLayout.setSpacing(17)
-        dateWidget.setStyleSheet("background-color: yellow;")
+        dateWidgetLayout.setSpacing(15)
+        # dateWidget.setStyleSheet("background-color: yellow;")
         dateWidget.setFixedSize(450, 20)
 
         for i in range(4):
             newDate = QLabel(dateWidget)
-            newDate.setFixedSize(25, 20)
-            newDate.setStyleSheet("background-color: green;")
-            dateWidgetLayout.addWidget(newDate, alignment=Qt.AlignmentFlag.AlignCenter)
             newDate.setText(Helper.dateGetter(i, "day"))
+            newDate.setFixedSize(27, 20)
+            newDate.setStyleSheet("font-weight: bold; color: white;")
+            dateWidgetLayout.addWidget(newDate, alignment=Qt.AlignmentFlag.AlignRight)
 
     def habitStateChanged(self, state, habitID, date):
         print(habitID, date)
