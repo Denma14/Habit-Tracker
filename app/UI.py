@@ -2,18 +2,25 @@
 import sys
 from PyQt6.QtWidgets import *
 from PyQt6.QtGui import *
-from PyQt6.QtCore import Qt
+from PyQt6.QtCore import Qt, QTimer
 from . import Core
 from . import Helper
 from . import Styles
 
 
 class AddHabitWidget(QWidget):
-    def __init__(self, HabitLogic: Core.HabitLogic, loadHabits: function, parent=None):
+    def __init__(
+        self,
+        HabitLogic: Core.HabitLogic,
+        loadHabits: function,
+        actionFeedback: function,
+        parent=None,
+    ):
         super().__init__()
 
         # self.setParent(parent)
         self.loadHabits = loadHabits
+        self.actionFeedback = actionFeedback
 
         self.HabitLogic = HabitLogic
         self.setAttribute(Qt.WidgetAttribute.WA_StyledBackground, True)
@@ -38,6 +45,7 @@ class AddHabitWidget(QWidget):
         else:
             self.habitNameInput.setText("Enter new habit name")
         self.loadHabits()
+        self.actionFeedback("Habit created")
 
 
 class EditHabit(QWidget):
@@ -249,7 +257,7 @@ class MainWindow(QMainWindow):
 
         # Add habit Widget
         self.AddhabitWidget = AddHabitWidget(
-            self.HabitLogic, self.loadHabits, self.mainWidget
+            self.HabitLogic, self.loadHabits, self.actionFeedback, self.mainWidget
         )
 
         # Scroll Area
@@ -312,7 +320,7 @@ class MainWindow(QMainWindow):
             habitWidgetRight = QLabel(habitWidget)
             habitWidgetLeft = QLabel(habitWidget)
 
-            habitName = QLabel(value["Name"], habitWidget)
+            habitName = QLabel(value["Name"], habitWidgetLeft)
 
             habitOptions = QToolButton(habitWidget)
 
@@ -332,7 +340,8 @@ class MainWindow(QMainWindow):
 
             # Styles --
             habitWidget.setFixedSize(450, 50)
-            habitName.setFixedSize(200, 35)
+            habitName.setFixedHeight(30)
+            habitwidgetLeftLayout.setContentsMargins(0, 0, 0, 0)
 
             habitWidget.setStyleSheet("background-color: red;")
             habitName.setStyleSheet(
@@ -352,7 +361,7 @@ class MainWindow(QMainWindow):
             habitLayout.addWidget(habitWidgetRight)
 
             habitwidgetLeftLayout.addWidget(
-                habitName, alignment=Qt.AlignmentFlag.AlignCenter
+                habitName, alignment=Qt.AlignmentFlag.AlignTop
             )
 
             habitLayout.addWidget(habitOptions)
@@ -418,9 +427,9 @@ class MainWindow(QMainWindow):
         dateWidgetLayout = QHBoxLayout(dateWidget)
         dateWidgetLayout.setAlignment(Qt.AlignmentFlag.AlignRight)
         dateWidgetLayout.setContentsMargins(0, 0, 60, 0)
-        dateWidgetLayout.setSpacing(20)
+        dateWidgetLayout.setSpacing(17)
         dateWidget.setStyleSheet("background-color: yellow;")
-        dateWidget.setFixedSize(450, 50)
+        dateWidget.setFixedSize(450, 20)
 
         for i in range(4):
             newDate = QLabel(dateWidget)
@@ -437,6 +446,14 @@ class MainWindow(QMainWindow):
         else:
             self.HabitLogic.unCompleteHabit(habitID, date)
 
+    def actionFeedback(self, message: str = "Action completed"):
+        messageLabel = QLabel(message, self.mainWidget)
+        messageLabel.setStyleSheet(
+            "color: green; font-weight: bold; background-color: yellow;"
+        )
+        self.mainLayout.addWidget(messageLabel)
+        QTimer.singleShot(3000, lambda: self.mainLayout.removeWidget(messageLabel))
+
     def onHabitClicked(self):
         print("Menu Clicked")
 
@@ -444,11 +461,13 @@ class MainWindow(QMainWindow):
         print("edit clicked")
         self.editHabitWidget.loadUI(HabitID)
         self.loadHabits()
+        self.actionFeedback("Habit edited")
 
     def onDeleteHabitClicked(self, state, HabitID):
         print("Delete clicked")
         self.HabitLogic.deleteHabit(HabitID)
         self.loadHabits()
+        self.actionFeedback("Habit deleted")
 
     def onViewHabitClicked(self, state, HabitID):
         print("View clicked")
