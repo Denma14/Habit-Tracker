@@ -49,7 +49,13 @@ class AddHabitWidget(QWidget):
 
 
 class EditHabit(QWidget):
-    def __init__(self, habitlogic: Core.HabitLogic, loadHabbits: function, parent=None):
+    def __init__(
+        self,
+        habitlogic: Core.HabitLogic,
+        loadHabbits: function,
+        actionFeedback: function,
+        parent=None,
+    ):
         super().__init__()
 
         self.setParent(parent)
@@ -60,6 +66,7 @@ class EditHabit(QWidget):
 
         self.habitLogic = habitlogic
         self.loadHabits = loadHabbits
+        self.actionFeedback = actionFeedback
         self.currentHabitID = 0
 
         self.parentLayout = QVBoxLayout(self)
@@ -68,6 +75,7 @@ class EditHabit(QWidget):
         self.mainLayout = QVBoxLayout(self.mainWidget)
 
         self.upperWidget = QWidget(self.mainWidget)
+
         self.lowerWidget = QWidget(self.mainWidget)
 
         self.upperLayout = QVBoxLayout(self.upperWidget)
@@ -79,7 +87,7 @@ class EditHabit(QWidget):
         self.editNameInput = QLineEdit(self.upperWidget)
 
         self.confirmButton = QPushButton(
-            "confirm",
+            "Confirm",
             self.lowerWidget,
             clicked=lambda: self.onConfirm(self.currentHabitID),
         )
@@ -90,13 +98,50 @@ class EditHabit(QWidget):
         self.UIinit()
 
     def UIinit(self):
+        # Sizes
+        self.habitNameLabel.setFixedSize(200, 50)
+
+        self.editNameInput.setFixedSize(300, 50)
+
+        self.confirmButton.setFixedSize(200, 80)
+        self.cancelButton.setFixedSize(200, 80)
+        # Alignments
+        self.habitNameLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.editNameInput.setAlignment(Qt.AlignmentFlag.AlignCenter)
         # Styles
-        self.setStyleSheet("background-color: blue;")
+        self.setStyleSheet("background-color: #222222;")
 
-        self.upperWidget.setStyleSheet("background-color: red;")
-        self.lowerWidget.setStyleSheet("background-color: green;")
+        # self.upperWidget.setStyleSheet("background-color: red;")
+        # self.lowerWidget.setStyleSheet("background-color: green;")
 
-        self.habitNameLabel.setStyleSheet("Background-color: black;")
+        self.habitNameLabel.setStyleSheet(
+            "Background-color: black; "
+            "color: white; "
+            "font-size: 20px; "
+            "font-weight: bold;"
+            "border-radius: 10px;"
+            "border: 2px solid white;"
+        )
+        self.editNameInput.setStyleSheet(
+            "Background-color: #303030; "
+            "color: white; "
+            "font-size: 20px; "
+            "font-weight: bold;"
+        )
+        self.confirmButton.setStyleSheet(
+            "background-color: #222222;"
+            "font-size: 20px;"
+            "font-weight: bold;"
+            "border-radius: 10px;"
+            "border: 2px solid #22ff22;"
+        )
+        self.cancelButton.setStyleSheet(
+            "background-color: #222222;"
+            "font-size: 20px;"
+            "font-weight: bold;"
+            "border-radius: 10px;"
+            "border: 2px solid #ff2222;"
+        )
 
         # Widgets
         self.parentLayout.addWidget(self.mainWidget)
@@ -106,12 +151,19 @@ class EditHabit(QWidget):
 
         self.upperLayout.addWidget(
             self.habitNameLabel,
-            alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignLeft,
+            alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter,
         )
-        self.upperLayout.addWidget(self.editNameInput)
+        self.upperLayout.addWidget(
+            self.editNameInput,
+            alignment=Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignHCenter,
+        )
 
-        self.lowerLayout.addWidget(self.confirmButton)
-        self.lowerLayout.addWidget(self.cancelButton)
+        self.lowerLayout.addWidget(
+            self.confirmButton, alignment=Qt.AlignmentFlag.AlignBottom
+        )
+        self.lowerLayout.addWidget(
+            self.cancelButton, alignment=Qt.AlignmentFlag.AlignBottom
+        )
 
     def loadUI(self, habitID: int):
         self.currentHabitID = habitID
@@ -130,6 +182,7 @@ class EditHabit(QWidget):
         self.habitLogic.updateHabit(habitID, self.editNameInput.text())
         self.loadHabits()
         self.setHidden(True)
+        self.actionFeedback("Habit updated")
 
 
 class ViewHabit(QWidget):
@@ -244,7 +297,9 @@ class MainWindow(QMainWindow):
 
         # Main Widget
         self.mainWidget = QWidget(self)
-        self.editHabitWidget = EditHabit(self.HabitLogic, self.loadHabits, self)
+        self.editHabitWidget = EditHabit(
+            self.HabitLogic, self.loadHabits, self.actionFeedback, self
+        )
         self.viewHabitWidget = ViewHabit(self.HabitLogic, self.loadHabits, self)
 
         self.setCentralWidget(self.mainWidget)
@@ -365,7 +420,6 @@ class MainWindow(QMainWindow):
             for i in range(4):
                 newCheckbox = QCheckBox(habitWidgetRight)
                 newCheckbox.setFixedSize(20, 20)
-                newCheckbox.setStyleSheet("background-color: green;")
                 habitWidgetRightLayout.addWidget(newCheckbox)
                 newCheckbox.setProperty("Date", Helper.dateGetter(i))
                 if newCheckbox.property("Date") in value["CompletedDates"]:
@@ -373,9 +427,11 @@ class MainWindow(QMainWindow):
                 else:
                     newCheckbox.setCheckState(Qt.CheckState.Unchecked)
                 newCheckbox.stateChanged.connect(
-                    lambda state, HabitId=key, date=newCheckbox.property(
+                    lambda state, checkbox=newCheckbox, HabitId=key, date=newCheckbox.property(
                         "Date"
-                    ): self.habitStateChanged(state, HabitId, date)
+                    ): self.habitStateChanged(
+                        state, checkbox, HabitId, date
+                    )
                 )
 
             # Habit Options
@@ -434,20 +490,24 @@ class MainWindow(QMainWindow):
             newDate.setStyleSheet("font-weight: bold; color: white;")
             dateWidgetLayout.addWidget(newDate, alignment=Qt.AlignmentFlag.AlignRight)
 
-    def habitStateChanged(self, state, habitID, date):
+    def habitStateChanged(self, state, checkbox: QCheckBox, habitID, date):
         print(habitID, date)
 
         if state == Qt.CheckState.Checked.value:
             self.HabitLogic.completeHabit(habitID, date)
+            checkbox.setStyleSheet("background-color: green;")
         else:
             self.HabitLogic.unCompleteHabit(habitID, date)
+            checkbox.setStyleSheet("background-color: #171616;")
 
     def actionFeedback(self, message: str = "Action completed"):
         messageLabel = QLabel(message, self.mainWidget)
         messageLabel.setStyleSheet(
             "color: green; font-weight: bold; background-color: yellow;"
         )
-        self.mainLayout.addWidget(messageLabel)
+        self.mainLayout.insertWidget(
+            2, messageLabel, alignment=Qt.AlignmentFlag.AlignTop
+        )
         QTimer.singleShot(3000, lambda: self.mainLayout.removeWidget(messageLabel))
 
     def onHabitClicked(self):
@@ -457,7 +517,6 @@ class MainWindow(QMainWindow):
         print("edit clicked")
         self.editHabitWidget.loadUI(HabitID)
         self.loadHabits()
-        self.actionFeedback("Habit edited")
 
     def onDeleteHabitClicked(self, state, HabitID):
         print("Delete clicked")
