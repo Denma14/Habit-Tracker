@@ -1,7 +1,6 @@
 # Logic File
 from . import Storage
 from . import Helper
-import time
 
 
 class Habit:

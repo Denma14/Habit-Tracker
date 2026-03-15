@@ -30,7 +30,7 @@ def nameValidator(name: str, habitDict: dict):  # Incomplete
     Invalidlist = [
         "Enter new habit name",
         "Name cannot be empty.",
-        "Invalid Name",
+        "Invalid name",
         "Name cannot be longer than 20 characters.",
         "Name already exists.",
     ]
@@ -43,7 +43,7 @@ def nameValidator(name: str, habitDict: dict):  # Incomplete
     else:
         searchQuery = None
         for key, value in habitDict.items():
-            if name.lower() in value.name.lower().strip():
+            if name.lower().strip() == value.name.lower().strip():
                 searchQuery = value.name
         if searchQuery:
             return False, Invalidlist[4]

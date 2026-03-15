@@ -31,8 +31,16 @@ class AddHabitWidget(QWidget):
         self.habitNameInput = QLineEdit("Enter new habit name", self)
         self.confirmButton = QPushButton("Confirm", self, clicked=self.onConfirm)
 
+        self.confirmButton.setFixedSize(60, 25)
+        self.confirmButton.setStyleSheet(
+            "color: white;"
+            "font-weight: bold;"
+            "border: 2px solid green;"
+            "border-radius: 5px;"
+            "background-color: #222222;"
+        )
+
         self.habitNameInput.setStyleSheet("font-weight: bold;")
-        self.confirmButton.setStyleSheet("background-color: green;")
 
         self.mainLayout.addWidget(self.habitNameInput)
         self.mainLayout.addWidget(self.confirmButton)
@@ -42,10 +50,11 @@ class AddHabitWidget(QWidget):
         print(bool, xdx)
         if not bool:
             self.habitNameInput.setText(xdx)
+            self.actionFeedback(f"{xdx} please try again.")
         else:
             self.habitNameInput.setText("Enter new habit name")
+            self.actionFeedback("Habit created")
         self.loadHabits()
-        self.actionFeedback("Habit created")
 
 
 class EditHabit(QWidget):
@@ -221,14 +230,31 @@ class ViewHabit(QWidget):
         self.UIinit()
 
     def UIinit(self):
-        self.setStyleSheet("background-color: blue;")
-
-        self.upperWidget.setStyleSheet("background-color: red;")
-        self.lowerWidget.setStyleSheet("background-color: yellow;")
-        self.habitNameLabel.setStyleSheet("Background-color: black;")
-
+        # Sizes
         self.upperWidget.setFixedHeight(50)
         self.habitNameLabel.setFixedHeight(30)
+        self.backButton.setFixedSize(45, 25)
+        # Styles
+        self.setStyleSheet("background-color: black;")
+
+        self.upperWidget.setStyleSheet("background-color: #222222;")
+        self.lowerWidget.setStyleSheet("background-color: #222222;")
+
+        self.backButton.setStyleSheet(
+            "color: white;"
+            "font-weight: bold;"
+            "border: 2px solid white;"
+            "border-radius: 5px;"
+            "background-color: #222222;"
+        )
+
+        self.habitNameLabel.setStyleSheet(
+            "color: white; " "font-size: 20px;" " font-weight: bold;"
+        )
+        self.streakLabel.setStyleSheet(
+            "color: white; " "font-size: 16px; " "font-weight: bold;"
+        )
+        # Widgets
 
         self.parentLayout.addWidget(self.mainWidget)
 
@@ -272,9 +298,21 @@ class ViewHabit(QWidget):
                 newDate.date
                 in self.habitLogic.habitData[self.currentHabitID]["CompletedDates"]
             ):
-                newDate.setStyleSheet("Background-color: green;")
+                newDate.setStyleSheet(
+                    "background-color: #171616;"
+                    "color: white;"
+                    "font-weight: bold;"
+                    "border: 2px solid green;"
+                    "border-radius: 5px;"
+                )
             else:
-                newDate.setStyleSheet("Background-color: red;")
+                newDate.setStyleSheet(
+                    "background-color: #171616;"
+                    "color: white;"
+                    "border: 2px solid red;"
+                    "font-weight: bold;"
+                    "border-radius: 5px;"
+                )
             self.lowerLayout.addWidget(newDate)
 
     def deleteWidgets(self):
@@ -295,10 +333,22 @@ class MainWindow(QMainWindow):
 
         self.HabitLogic = Core.HabitLogic()
 
+        # States
+        self.isFeedbackActive = False
+
         # Main Widget
         self.mainWidget = QWidget(self)
         self.editHabitWidget = EditHabit(
-            self.HabitLogic, self.loadHabits, self.actionFeedback, self
+            self.HabitLogic,
+            self.loadHabits,
+            self.actionFeedback,
+            self,
+        )
+        self.AddhabitWidget = AddHabitWidget(
+            self.HabitLogic,
+            self.loadHabits,
+            self.actionFeedback,
+            self.mainWidget,
         )
         self.viewHabitWidget = ViewHabit(self.HabitLogic, self.loadHabits, self)
 
@@ -309,11 +359,6 @@ class MainWindow(QMainWindow):
         self.topWidget = QWidget(self.mainWidget)
         self.topLayout = QHBoxLayout(self.topWidget)
         self.appName = QLabel("Habit Tracker", self.topWidget)
-
-        # Add habit Widget
-        self.AddhabitWidget = AddHabitWidget(
-            self.HabitLogic, self.loadHabits, self.actionFeedback, self.mainWidget
-        )
 
         # Scroll Area
         self.ScrollArea = QScrollArea(self.mainWidget)
@@ -424,8 +469,10 @@ class MainWindow(QMainWindow):
                 newCheckbox.setProperty("Date", Helper.dateGetter(i))
                 if newCheckbox.property("Date") in value["CompletedDates"]:
                     newCheckbox.setCheckState(Qt.CheckState.Checked)
+                    newCheckbox.setStyleSheet("border: 2px solid green;")
                 else:
                     newCheckbox.setCheckState(Qt.CheckState.Unchecked)
+                    newCheckbox.setStyleSheet("border: 2px solid #171616;")
                 newCheckbox.stateChanged.connect(
                     lambda state, checkbox=newCheckbox, HabitId=key, date=newCheckbox.property(
                         "Date"
@@ -478,7 +525,7 @@ class MainWindow(QMainWindow):
         )
         dateWidgetLayout = QHBoxLayout(dateWidget)
         dateWidgetLayout.setAlignment(Qt.AlignmentFlag.AlignRight)
-        dateWidgetLayout.setContentsMargins(0, 0, 60, 0)
+        dateWidgetLayout.setContentsMargins(0, 0, 55, 0)
         dateWidgetLayout.setSpacing(15)
         # dateWidget.setStyleSheet("background-color: yellow;")
         dateWidget.setFixedSize(450, 20)
@@ -495,20 +542,30 @@ class MainWindow(QMainWindow):
 
         if state == Qt.CheckState.Checked.value:
             self.HabitLogic.completeHabit(habitID, date)
-            checkbox.setStyleSheet("background-color: green;")
+            checkbox.setStyleSheet("border: 2px solid green;")
         else:
             self.HabitLogic.unCompleteHabit(habitID, date)
-            checkbox.setStyleSheet("background-color: #171616;")
+            checkbox.setStyleSheet("border: 2px solid #171616;")
 
     def actionFeedback(self, message: str = "Action completed"):
-        messageLabel = QLabel(message, self.mainWidget)
-        messageLabel.setStyleSheet(
-            "color: green; font-weight: bold; background-color: yellow;"
-        )
-        self.mainLayout.insertWidget(
-            2, messageLabel, alignment=Qt.AlignmentFlag.AlignTop
-        )
-        QTimer.singleShot(3000, lambda: self.mainLayout.removeWidget(messageLabel))
+        if not self.isFeedbackActive:
+            self.isFeedbackActive = True
+            messageLabel = QLabel(message, self.mainWidget)
+            messageLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
+            messageLabel.setFixedHeight(30)
+            messageLabel.setStyleSheet(
+                "color: white;"
+                "font-size: 16px;"
+                "font-weight: bold;"
+                "background-color: #222222;"
+                "border: 1px solid blue;"
+                "border-radius: 3px;"
+            )
+            self.mainLayout.insertWidget(
+                2, messageLabel, alignment=Qt.AlignmentFlag.AlignTop
+            )
+            QTimer.singleShot(1500, lambda: self.mainLayout.removeWidget(messageLabel))
+            QTimer.singleShot(1500, lambda: setattr(self, "isFeedbackActive", False))
 
     def onHabitClicked(self):
         print("Menu Clicked")
@@ -519,10 +576,14 @@ class MainWindow(QMainWindow):
         self.loadHabits()
 
     def onDeleteHabitClicked(self, state, HabitID):
+        if self.isFeedbackActive:
+            return
+        self.actionFeedback(
+            f"Habit \"{self.HabitLogic.habitData[HabitID]['Name']}\" deleted"
+        )
         print("Delete clicked")
         self.HabitLogic.deleteHabit(HabitID)
         self.loadHabits()
-        self.actionFeedback("Habit deleted")
 
     def onViewHabitClicked(self, state, HabitID):
         print("View clicked")
